@@ -78,7 +78,7 @@ export async function getPaginationProduct({
   page: number;
   limit: number;
 }) {
-  const skip = (page - 1) * limit;
+  const skip = (page - 1) * limit; //2 -1 *10 =10
   try {
     const products = await prisma.product.findMany({
       skip,

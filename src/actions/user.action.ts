@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use server";
+
 import { auth, signIn, signOut } from "@/auth";
 import { cachedUser } from "@/lib/cache/user.cache";
 import prisma from "@/lib/db";
