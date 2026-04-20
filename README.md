@@ -1,5 +1,7 @@
 # Pet Store 🐾
 
+<!--  -->
+
 A full-stack platform that combines E-Commerce functionality with a social community for pet lovers.
 
 ## 🌐 Live Website
