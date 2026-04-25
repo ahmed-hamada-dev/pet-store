@@ -88,7 +88,7 @@ model Session {
   updatedAt DateTime @updatedAt
 }
 
-model category {
+model Category {
   id    String @id @default(uuid())
   name  String @unique
   image String
@@ -121,12 +121,11 @@ model Product {
   categoryId  String
 
   //Relations
-  category category   @relation(fields: [categoryId], references: [id])
+  category Category   @relation(fields: [categoryId], references: [id])
   CartItem CartItem[]
 
   ratings Rating[]
 
-  Wishlist     Wishlist[]
   WishlistItem WishlistItem[]
   OrderItem    OrderItem[]
 
@@ -189,16 +188,14 @@ model Wishlist {
   items     WishlistItem[]
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
-  Product   Product?       @relation(fields: [productId], references: [id])
-  productId String?
 }
 
 model WishlistItem {
   id         String   @id @default(cuid())
   wishlistId String
-  wishlist   Wishlist @relation(fields: [wishlistId], references: [id])
+  wishlist   Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
   productId  String
-  product    Product  @relation(fields: [productId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
   createdAt  DateTime @default(now())
 
   @@unique([wishlistId, productId]) //   Can't add the product twice 
@@ -231,7 +228,7 @@ model Order {
 model OrderItem {
   id      String @id @default(uuid())
   orderId String
-  order   Order  @relation(fields: [orderId], references: [id])
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   productId String
   product   Product @relation(fields: [productId], references: [id])
