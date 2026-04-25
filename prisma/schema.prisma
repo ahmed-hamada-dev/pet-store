@@ -16,6 +16,7 @@ datasource db {
 enum UserRole {
   ADMIN
   USER
+  MERCHANT
 }
 
 enum CategoryStatus {
@@ -27,6 +28,35 @@ enum ProductStatus {
   ACTIVE
   INACTIVE
   OUT_OF_STOCK
+}
+
+enum StoreStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum OrderStatus {
+  PENDING
+  ON_WAY
+  DELIVERED
+  CANCELED
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  VISA
+}
+
+enum NotificationEnum {
+  UPVOTE
+  COMMENT
 }
 
 model User {
@@ -55,6 +85,105 @@ model User {
   upvotes      Upvote[]
   notification Notification[]
   comments     Comment[]
+  merchant     Merchant?
+  storeReviews StoreReview[]
+}
+
+model Merchant {
+  id         String    @id @default(uuid())
+  name       String
+  slug       String    @unique
+  email      String    @unique
+  phone      String?
+  address    String?
+  city       String?
+  state      String?
+  postalCode String?
+  country    String?
+  
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String    @unique
+
+  stores     Store[]
+  payouts    Payout[]
+  balance    MerchantBalance?
+
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+
+  @@index([deletedAt])
+}
+
+model MerchantBalance {
+  id             String    @id @default(uuid())
+  merchantId     String    @unique
+  merchant       Merchant  @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  
+  availableFunds Float     @default(0.0)
+  pendingFunds   Float     @default(0.0)
+  totalEarned    Float     @default(0.0)
+  
+  updatedAt      DateTime  @updatedAt
+}
+
+model Payout {
+  id         String       @id @default(uuid())
+  merchantId String
+  merchant   Merchant     @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+  amount     Float
+  status     PayoutStatus @default(PENDING)
+  
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  @@index([merchantId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Store {
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  description String?
+  logo        String?
+  banner      String?
+  status      StoreStatus @default(ACTIVE)
+
+  merchantId  String
+  merchant    Merchant @relation(fields: [merchantId], references: [id], onDelete: Cascade)
+
+  products    Product[]
+  subOrders   SubOrder[]
+  orderItems  OrderItem[]
+  cartItems   CartItem[]
+  reviews     StoreReview[]
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  @@index([merchantId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+model StoreReview {
+  id        String   @id @default(uuid())
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  rating    Float
+  comment   String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([storeId, userId])
+  @@index([storeId])
 }
 
 model Account {
@@ -93,8 +222,6 @@ model Category {
   name  String @unique
   image String
 
-  //Relations
-
   status   CategoryStatus @default(ACTIVE)
   products Product[]
 
@@ -105,111 +232,144 @@ model Category {
 }
 
 model Product {
-  id     String   @id @default(uuid())
-  name   String
-  slug   String   @unique
-  images String[]
-
+  id          String   @id @default(uuid())
+  name        String
+  slug        String   @unique
+  images      String[]
   price       Float
   description String?
-  quantity    Int           @default(1)
   status      ProductStatus @default(ACTIVE)
   discount    Float?
   rating      Float         @default(0.0)
   brand       String?
   isFeatured  Boolean       @default(false)
+  
   categoryId  String
-
-  //Relations
-  category Category   @relation(fields: [categoryId], references: [id])
-  CartItem CartItem[]
-
-  ratings Rating[]
-
+  category    Category   @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  
+  storeId     String
+  store       Store      @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  
+  variants    ProductVariant[]
+  CartItem    CartItem[]
+  ratings     Rating[]
   WishlistItem WishlistItem[]
-  OrderItem    OrderItem[]
+  OrderItem   OrderItem[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 
   @@index([categoryId])
+  @@index([storeId])
   @@index([slug])
   @@index([status])
+  @@index([createdAt])
+  @@index([deletedAt])
+}
+
+model ProductVariant {
+  id         String   @id @default(uuid())
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  size       String?
+  color      String?
+  stock      Int      @default(0)
+  price      Float
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  CartItem   CartItem[]
+
+  @@index([productId])
 }
 
 model Rating {
-  id      String  @id @default(uuid())
-  comment String?
-  rating  Float   @default(1)
+  id        String  @id @default(uuid())
+  comment   String?
+  rating    Float   @default(1)
 
-  product   Product @relation(fields: [productId], references: [id])
   productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
 
-  user      User     @relation(fields: [userId], references: [id])
   userId    String
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([productId, userId])
+  @@index([productId])
 }
 
 model Cart {
-  id     String @id @default(uuid())
-  userId String @unique
-
-  user      User       @relation(fields: [userId], references: [id])
+  id        String     @id @default(uuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     CartItem[]
-  //relations
+  
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
 }
 
 model CartItem {
-  id        String @id @default(uuid())
+  id        String   @id @default(uuid())
   cartId    String
-  productId String
-  quantity  Int    @default(1)
-  //relations
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  
+  storeId   String
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
 
-  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
+  variantId String?
+  variant   ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  quantity  Int      @default(1)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // That product can't be added to the same cart twice
-  @@unique([cartId, productId])
+  @@unique([cartId, productId, variantId])
+  @@index([storeId])
 }
 
 model Wishlist {
   id        String         @id @default(cuid())
   userId    String         @unique
-  user      User           @relation(fields: [userId], references: [id])
+  user      User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   items     WishlistItem[]
+  
   createdAt DateTime       @default(now())
-  updatedAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
 }
 
 model WishlistItem {
   id         String   @id @default(cuid())
   wishlistId String
   wishlist   Wishlist @relation(fields: [wishlistId], references: [id], onDelete: Cascade)
+  
   productId  String
   product    Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  
   createdAt  DateTime @default(now())
 
-  @@unique([wishlistId, productId]) //   Can't add the product twice 
+  @@unique([wishlistId, productId]) 
 }
 
 model Order {
-  id     String @id @default(uuid())
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
+  id            String         @id @default(uuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
 
-  items         OrderItem[]
+  subOrders     SubOrder[]
   totalPrice    Float
-  status        OrderStatus    @default(PENDING)
+  
   paymentMethod PaymentMethod?
+  
   name          String
   email         String
   phone         String
@@ -219,101 +379,133 @@ model Order {
   country       String
   postalCode    String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 
   @@index([userId])
+  @@index([createdAt])
+}
+
+model SubOrder {
+  id            String       @id @default(uuid())
+  orderId       String
+  order         Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  storeId       String
+  store         Store        @relation(fields: [storeId], references: [id])
+  
+  items         OrderItem[]
+  status        OrderStatus  @default(PENDING)
+  
+  totalPrice    Float
+  shippingFee   Float        @default(0.0)
+  platformFee   Float        @default(0.0) // Total platform fee for this sub-order
+
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([orderId])
+  @@index([storeId])
+  @@index([status])
 }
 
 model OrderItem {
-  id      String @id @default(uuid())
-  orderId String
-  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id            String          @id @default(uuid())
+  subOrderId    String
+  subOrder      SubOrder        @relation(fields: [subOrderId], references: [id], onDelete: Cascade)
 
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  quantity  Int     @default(1)
-  price     Float
+  storeId       String
+  store         Store           @relation(fields: [storeId], references: [id])
 
-  createdAt DateTime @default(now())
+  productId     String?         
+  product       Product?        @relation(fields: [productId], references: [id], onDelete: SetNull)
+  
+  variantId     String?         
+  
+  productName   String
+  productImage  String?
+  variantSize   String?
+  variantColor  String?
 
-  @@index([orderId])
+  quantity      Int             @default(1)
+  price         Float           
+  
+  commissionRate Float          @default(0.0) 
+  platformFee    Float          @default(0.0) 
+
+  createdAt     DateTime        @default(now())
+
+  @@index([subOrderId])
+  @@index([storeId])
   @@index([productId])
+  @@index([variantId])
 }
 
 // Community 
 model Post {
-  id          String  @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   description String?
   image       String?
 
-  //Relations
-  User     User      @relation(fields: [userId], references: [id])
-  userId   String
-  upvotes  Upvote[]
-  comments Comment[]
+  userId      String
+  User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  upvotes     Upvote[]
+  comments    Comment[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([userId])
 }
 
 model Upvote {
-  id     String @id @default(uuid())
-  //Relations
-  User   User   @relation(fields: [userId], references: [id])
-  userId String
+  id        String   @id @default(uuid())
+  
+  userId    String
+  User      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  postId    String
+  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId    String
 
   @@unique([userId, postId])
 }
 
 model Comment {
-  id      String @id @default(uuid())
-  content String
-  post    Post   @relation(fields: [postId], references: [id], onDelete: Cascade)
-  postId  String
+  id        String    @id @default(uuid())
+  content   String
+  
+  postId    String
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  parentId String? // null ? comment : a parent for replies
-  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade) // parent is the comment that we will reply to
-  replies  Comment[] @relation("CommentReplies")
+  parentId  String? 
+  parent    Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies   Comment[] @relation("CommentReplies")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([postId])
+  @@index([userId])
 }
 
 model Notification {
-  id      String           @id @default(uuid())
-  type    NotificationEnum
-  message String
-  isRead  Boolean          @default(false)
+  id        String           @id @default(uuid())
+  type      NotificationEnum
+  message   String
+  isRead    Boolean          @default(false)
 
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime @default(now())
-}
+  createdAt DateTime         @default(now())
 
-enum OrderStatus {
-  PENDING
-  ON_WAY
-  DELIVERED
-  CANCELED
-}
-
-enum PaymentMethod {
-  CASH_ON_DELIVERY
-  VISA
-}
-
-enum NotificationEnum {
-  UPVOTE
-  COMMENT
+  @@index([userId])
 }
