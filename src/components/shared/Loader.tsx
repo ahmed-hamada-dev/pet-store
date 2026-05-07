@@ -1,70 +1,15 @@
 "use client";
 
 import React from "react";
-import { motion } from "framer-motion";
-
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0, scale: 0.8, rotate: -5 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotate: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.6, -0.05, 0.01, 0.99],
-      type: "spring",
-      stiffness: 120,
-    },
-  },
-};
-
-const pulseVariants = {
-  animate: {
-    opacity: [0.3, 0.7, 0.3],
-    scale: [1, 1.08, 1],
-    transition: { duration: 2.8, repeat: Infinity, ease: "easeInOut" },
-  },
-};
-
-const groundVariants = {
-  animate: {
-    x: [-3, 3, -3],
-    scaleY: [1, 1.02, 1],
-    transition: { duration: 0.35, repeat: Infinity, ease: "easeInOut" },
-  },
-};
-
-const cameraShakeVariants = {
-  animate: {
-    y: [0, -1, 0, 1, 0],
-    x: [0, 1, 0, -1, 0],
-    transition: { duration: 0.4, repeat: Infinity, ease: "easeInOut" },
-  },
-};
 
 const Loader = () => {
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-      className="
-        fixed inset-0 flex items-center justify-center
-        bg-gray-700 backdrop-blur-xl
-      "
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-background/80 backdrop-blur-md z-9999"
       role="status"
-      aria-label="Chasing"
+      aria-label="Loading"
     >
-      <motion.div
-        variants={cameraShakeVariants}
-        animate="animate"
-        className="
-          relative p-10 bg-gray-600/80 border border-blue-400/30
-          rounded-3xl shadow-[0_8px_24px_rgba(0,0,0,0.3)]
-          flex flex-col items-center
-        "
-      >
+      <div className="relative p-10 bg-card border border-border rounded-3xl shadow-xl flex flex-col items-center animate-in fade-in zoom-in duration-500">
         {/* Running Cat and Laser Animation */}
         <div className="relative w-36 h-24 mb-6 flex items-center">
           <style jsx>{`
@@ -96,32 +41,12 @@ const Loader = () => {
               animation: trail 0.5s ease-in-out infinite;
             }
             @keyframes chase {
-              0% {
-                transform: translateX(0) scale(1);
-                opacity: 0.6;
-              }
-              50% {
-                transform: translateX(10px) scale(1.15);
-                opacity: 1;
-              }
-              100% {
-                transform: translateX(0) scale(1);
-                opacity: 0.6;
-              }
+              0%, 100% { transform: translateX(0) scale(1); opacity: 0.6; }
+              50% { transform: translateX(10px) scale(1.15); opacity: 1; }
             }
             @keyframes trail {
-              0% {
-                opacity: 0.5;
-                transform: scaleX(1);
-              }
-              50% {
-                opacity: 0.8;
-                transform: scaleX(1.2);
-              }
-              100% {
-                opacity: 0.5;
-                transform: scaleX(1);
-              }
+              0%, 100% { opacity: 0.5; transform: scaleX(1); }
+              50% { opacity: 0.8; transform: scaleX(1.2); }
             }
             .ground {
               width: 120%;
@@ -148,21 +73,20 @@ const Loader = () => {
               filter: blur(3px);
               border-radius: 3px;
             }
+            .cat-container {
+              animation: cat-run 0.3s infinite ease-in-out;
+            }
+            @keyframes cat-run {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-4px); }
+            }
           `}</style>
 
           {/* Laser Beam */}
-          <motion.div
-            className="laser"
-            animate={{ rotate: [0, 2, 0, -2, 0] }}
-            transition={{ duration: 0.5, repeat: Infinity, ease: "easeInOut" }}
-          />
+          <div className="laser" />
 
           {/* Running Cat (SVG) */}
-          <motion.div
-            className="absolute w-20 h-20 left-6 top-2"
-            animate={{ y: [0, -8, 0], scaleY: [1, 0.95, 1] }}
-            transition={{ duration: 0.3, repeat: Infinity, ease: "easeInOut" }}
-          >
+          <div className="absolute w-20 h-20 left-6 top-2 cat-container">
             <svg
               width="80"
               height="80"
@@ -177,176 +101,50 @@ const Loader = () => {
                   .cat-leg-front, .cat-leg-back { animation: run-front 0.3s infinite; }
                   .cat-leg-front-2, .cat-leg-back-2 { animation: run-back 0.3s infinite 0.15s; }
                   .cat-tail { animation: wag 0.5s ease-in-out infinite alternate; }
-                  .cat-ear { animation: twitch 1.2s infinite; }
                   @keyframes bounce {
-                    0%, 100% { transform: translateY(0) scaleY(1); }
-                    50% { transform: translateY(-3px) scaleY(0.98); }
+                    0%, 100% { transform: translateY(0); }
+                    50% { transform: translateY(-2px); }
                   }
                   @keyframes tilt {
                     0%, 100% { transform: rotate(0deg); }
                     50% { transform: rotate(2deg); }
                   }
                   @keyframes run-front {
-                    0% { transform: translateY(0) rotate(0deg); }
-                    50% { transform: translateY(-6px) rotate(25deg); }
-                    100% { transform: translateY(0) rotate(0deg); }
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    50% { transform: translateY(-4px) rotate(15deg); }
                   }
                   @keyframes run-back {
-                    0% { transform: translateY(0) rotate(0deg); }
-                    50% { transform: translateY(-6px) rotate(-25deg); }
-                    100% { transform: translateY(0) rotate(0deg); }
+                    0%, 100% { transform: translateY(0) rotate(0deg); }
+                    50% { transform: translateY(-4px) rotate(-15deg); }
                   }
                   @keyframes wag {
-                    0% { transform: rotate(-12deg); }
-                    100% { transform: rotate(12deg); }
-                  }
-                  @keyframes twitch {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-1px); }
+                    0% { transform: rotate(-10deg); }
+                    100% { transform: rotate(10deg); }
                   }
                 `}
               </style>
-              {/* Cat Body */}
-              <rect
-                className="cat-body"
-                x="20"
-                y="32"
-                width="40"
-                height="20"
-                rx="10"
-                fill="#4B5563"
-              />
-              {/* Cat Head */}
-              <circle
-                className="cat-head"
-                cx="60"
-                cy="28"
-                r="10"
-                fill="#4B5563"
-              />
-              {/* Cat Ear */}
-              <path
-                className="cat-ear"
-                d="M58 20L62 14L66 20H58Z"
-                fill="#4B5563"
-              />
-              {/* Cat Tail */}
-              <rect
-                className="cat-tail"
-                x="14"
-                y="40"
-                width="20"
-                height="5"
-                rx="2.5"
-                fill="#4B5563"
-                transform="rotate(-12 14 40)"
-              />
-              {/* Cat Legs */}
-              <rect
-                className="cat-leg-front"
-                x="30"
-                y="48"
-                width="8"
-                height="14"
-                rx="4"
-                fill="#4B5563"
-              />
-              <rect
-                className="cat-leg-front-2"
-                x="42"
-                y="48"
-                width="8"
-                height="14"
-                rx="4"
-                fill="#4B5563"
-              />
-              <rect
-                className="cat-leg-back"
-                x="22"
-                y="48"
-                width="8"
-                height="14"
-                rx="4"
-                fill="#4B5563"
-              />
-              <rect
-                className="cat-leg-back-2"
-                x="50"
-                y="48"
-                width="8"
-                height="14"
-                rx="4"
-                fill="#4B5563"
-              />
-              {/* Cat Eyes */}
-              <circle cx="58" cy="28" r="2.5" fill="#F3F4F6">
-                <animate
-                  attributeName="r"
-                  values="2.5;3;2.5"
-                  dur="1.5s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-              <circle cx="64" cy="28" r="2.5" fill="#F3F4F6">
-                <animate
-                  attributeName="r"
-                  values="2.5;3;2.5"
-                  dur="1.5s"
-                  repeatCount="indefinite"
-                />
-              </circle>
-              {/* Cat Whiskers */}
-              <path
-                d="M56 32C54 32 52 30 52 28"
-                stroke="#F3F4F6"
-                strokeWidth="1"
-                strokeLinecap="round"
-              />
-              <path
-                d="M66 32C68 32 70 30 70 28"
-                stroke="#F3F4F6"
-                strokeWidth="1"
-                strokeLinecap="round"
-              />
+              <rect className="cat-body text-muted-foreground" x="20" y="32" width="40" height="20" rx="10" fill="currentColor" />
+              <circle className="cat-head text-muted-foreground" cx="60" cy="28" r="10" fill="currentColor" />
+              <path className="text-muted-foreground" d="M58 20L62 14L66 20H58Z" fill="currentColor" />
+              <rect className="cat-tail text-muted-foreground" x="14" y="40" width="20" height="5" rx="2.5" fill="currentColor" transform="rotate(-12 14 40)" />
+              <rect className="cat-leg-front text-muted-foreground" x="30" y="48" width="8" height="14" rx="4" fill="currentColor" />
+              <rect className="cat-leg-front-2 text-muted-foreground" x="42" y="48" width="8" height="14" rx="4" fill="currentColor" />
+              <rect className="cat-leg-back text-muted-foreground" x="22" y="48" width="8" height="14" rx="4" fill="currentColor" />
+              <rect className="cat-leg-back-2 text-muted-foreground" x="50" y="48" width="8" height="14" rx="4" fill="currentColor" />
             </svg>
-          </motion.div>
+          </div>
 
           {/* Ground Line and Shadow */}
-          <motion.div
-            variants={groundVariants}
-            animate="animate"
-            className="ground"
-          />
-          <motion.div
-            variants={groundVariants}
-            animate="animate"
-            className="ground-shadow"
-          />
+          <div className="ground" />
+          <div className="ground-shadow" />
         </div>
 
-        {/* Pulsing Background */}
-        <motion.div
-          variants={pulseVariants}
-          animate="animate"
-          className="
-            absolute inset-0 bg-primary/10
-            rounded-3xl
-          "
-        />
-
         {/* Chasing Text */}
-        <motion.p
-          className="
-            text-sm font-semibold bg-clip-text text-transparent
-            bg-blue-400
-          "
-          animate={{ y: [0, -2, 0] }}
-          transition={{ duration: 0.5, repeat: Infinity, ease: "easeInOut" }}
-        >
+        <p className="text-sm font-semibold text-primary animate-pulse">
           Chasing...
-        </motion.p>
-      </motion.div>
-    </motion.div>
+        </p>
+      </div>
+    </div>
   );
 };
 

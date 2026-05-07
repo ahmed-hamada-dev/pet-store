@@ -1,43 +1,15 @@
 "use client";
 
 import Link from "next/link";
-
 import { Mail, Phone, Linkedin, Github } from "lucide-react";
-import { motion } from "framer-motion";
 
 export default function Footer() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, duration: 0.6 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
-
   return (
-    <motion.footer
-      className="  py-16 text-foreground"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-    >
+    <footer className="py-16 text-foreground animate-in fade-in duration-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-4 gap-8"
-          variants={containerVariants}
-        >
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
-          <motion.div variants={itemVariants}>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-100 fill-mode-both">
             <h4 className="text-xl font-bold text-foreground mb-4">
               Pet Haven
             </h4>
@@ -45,10 +17,10 @@ export default function Footer() {
               Your one-stop shop for premium pet supplies and a vibrant
               community.
             </p>
-          </motion.div>
+          </div>
 
           {/* Explore Section */}
-          <motion.div variants={itemVariants}>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-200 fill-mode-both">
             <h4 className="text-xl font-bold text-foreground mb-4">Explore</h4>
             <ul className="space-y-3">
               <li>
@@ -68,10 +40,10 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </motion.div>
+          </div>
 
           {/* Stay Connected Section */}
-          <motion.div variants={itemVariants}>
+          <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 delay-300 fill-mode-both">
             <h4 className="text-xl font-bold text-foreground mb-4">
               Stay Connected
             </h4>
@@ -108,7 +80,7 @@ export default function Footer() {
                   href="https://www.linkedin.com/in/ahmed-hamada-dev/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                   aria-label="Visit our LinkedIn profile"
                 >
                   <Linkedin className="h-5 w-5" />
@@ -117,30 +89,24 @@ export default function Footer() {
                   href="https://github.com/ahmed-hamada-dev"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary"
+                  className="text-muted-foreground hover:text-primary transition-colors"
                   aria-label="Visit our GitHub profile"
                 >
                   <Github className="h-5 w-5" />
                 </a>
               </div>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
 
         {/* Divider */}
-        <motion.hr
-          className="my-8 border-t border-muted-foreground/20"
-          variants={itemVariants}
-        />
+        <hr className="my-8 border-t border-muted-foreground/20 animate-in fade-in duration-1000 delay-500 fill-mode-both" />
 
         {/* Copyright */}
-        <motion.div
-          className="text-center text-muted-foreground text-sm"
-          variants={itemVariants}
-        >
+        <div className="text-center text-muted-foreground text-sm animate-in fade-in duration-500 delay-600 fill-mode-both">
           <p>© 2025 Snow. All rights reserved.</p>
-        </motion.div>
+        </div>
       </div>
-    </motion.footer>
+    </footer>
   );
 }

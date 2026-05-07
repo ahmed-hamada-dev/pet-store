@@ -12,33 +12,7 @@ import toast from "react-hot-toast";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { ChevronDown, ChevronUp, Edit, Trash2 } from "lucide-react";
 import ConfirmDeleteDialog from "./dialogs/ConfirmDeleteDialog";
-import { AnimatePresence, motion } from "framer-motion";
 
-
-const buttonVariants = {
-  hover: { scale: 1.1, transition: { type: "spring", stiffness: 300 } },
-  tap: { scale: 0.9 },
-};
-const collapseVariants = {
-  open: {
-    height: "auto",
-    opacity: 1,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-  closed: {
-    height: 0,
-    opacity: 0,
-    transition: { duration: 0.3, ease: "easeIn" },
-  },
-};
-const commentVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { delay: i * 0.1, type: "spring", stiffness: 100 },
-  }),
-};
 const CommentItem = ({
   comment,
   postId,
@@ -76,7 +50,7 @@ const CommentItem = ({
                       updatedAt: new Date(),
                     }),
                   }
-                : post
+                : post,
             ),
           })),
         };
@@ -113,7 +87,7 @@ const CommentItem = ({
                     ...post,
                     comments: removeCommentFromTree(post.comments, comment.id),
                   }
-                : post
+                : post,
             ),
           })),
         };
@@ -135,7 +109,7 @@ const CommentItem = ({
   const updateCommentInTree = (
     comments: commentType[],
     commentId: string,
-    updatedComment: commentType
+    updatedComment: commentType,
   ): commentType[] => {
     return comments.map((c) =>
       c.id === commentId
@@ -145,13 +119,13 @@ const CommentItem = ({
             replies: c.replies
               ? updateCommentInTree(c.replies, commentId, updatedComment)
               : c.replies,
-          }
+          },
     );
   };
 
   const removeCommentFromTree = (
     comments: commentType[],
-    commentId: string
+    commentId: string,
   ): commentType[] => {
     return comments
       .filter((c) => c.id !== commentId)
@@ -166,11 +140,8 @@ const CommentItem = ({
   const isOwner = currentUser?.id === comment.userId;
 
   return (
-    <motion.div
-      className={`ml-${level * 4} border-l-2 border-blue-400/30 pl-4 py-2`}
-      variants={commentVariants}
-      initial="hidden"
-      animate="visible"
+    <div
+      className={`ml-${level * 4} border-l-2 border-primary/20 pl-4 py-2 animate-in fade-in slide-in-from-left-4 duration-500`}
     >
       <div className="flex items-center gap-2">
         <Image
@@ -178,53 +149,40 @@ const CommentItem = ({
           alt={comment.user.name || "User"}
           width={24}
           height={24}
-          className="rounded-full border border-blue-400/30"
+          className="rounded-full border border-border"
         />
-        <p className="text-sm font-medium text-gray-100 font-['Inter']">
+        <p className="text-sm font-medium text-foreground">
           {comment.user.name || "Anonymous"}
         </p>
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-muted-foreground">
           {format(new Date(comment.createdAt), "MMM d, yyyy h:mm a")}
         </p>
         {isOwner && (
           <div className="ml-auto flex gap-2 items-center">
-            <motion.div
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
+            <button
+              className="p-1 rounded-full hover:bg-muted transition-colors"
+              onClick={() => setIsEditing(!isEditing)}
+              aria-label="Edit comment"
             >
-              <Edit
-                className="w-4 h-4 text-blue-400 cursor-pointer hover:text-blue-300"
-                onClick={() => setIsEditing(!isEditing)}
-                aria-label="Edit comment"
-              />
-            </motion.div>
+              <Edit className="w-4 h-4 text-primary" />
+            </button>
             <ConfirmDeleteDialog
               onDelete={() => deleteMutation.mutate()}
               name=""
               id={comment.id}
             >
-              <motion.div
-                variants={buttonVariants}
-                whileHover="hover"
-                whileTap="tap"
-              >
+              <div className="p-1 rounded-full hover:bg-muted transition-colors cursor-pointer">
                 <Trash2
-                  className="w-4 h-4 text-rose-400 cursor-pointer hover:text-rose-300"
+                  className="w-4 h-4 text-destructive"
                   aria-label="Delete comment"
                 />
-              </motion.div>
+              </div>
             </ConfirmDeleteDialog>
           </div>
         )}
       </div>
       {isEditing ? (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="mt-2"
-        >
+        <div className="mt-2 animate-in fade-in zoom-in-95 duration-300">
           <CommentForm
             postId={postId}
             defaultContent={comment.content}
@@ -235,27 +193,19 @@ const CommentItem = ({
             }}
             onSubmit={(data) => updateMutation.mutate(data)}
           />
-        </motion.div>
+        </div>
       ) : (
-        <p className="text-sm text-gray-300 mt-1">{comment.content}</p>
+        <p className="text-sm text-muted-foreground mt-1">{comment.content}</p>
       )}
-      <motion.button
+      <button
         onClick={() => setShowReplyForm(!showReplyForm)}
-        className="text-xs text-blue-400 hover:text-blue-300 font-['Inter'] mt-1"
-        variants={buttonVariants}
-        whileHover="hover"
-        whileTap="tap"
+        className="text-xs text-primary hover:underline mt-1 active:scale-95 transition-transform"
         aria-label={showReplyForm ? "Hide reply form" : "Show reply form"}
       >
         {showReplyForm ? "Cancel Reply" : "Reply"}
-      </motion.button>
+      </button>
       {showReplyForm && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="mt-2"
-        >
+        <div className="mt-2 animate-in fade-in slide-in-from-top-2 duration-300">
           <CommentForm
             postId={postId}
             parentId={comment.id}
@@ -265,16 +215,13 @@ const CommentItem = ({
               queryClient.invalidateQueries({ queryKey: ["comments"] });
             }}
           />
-        </motion.div>
+        </div>
       )}
       {comment.replies?.length > 0 && (
         <div className="mt-2">
-          <motion.button
+          <button
             onClick={() => setShowReplies(!showReplies)}
-            className="flex items-center gap-1 text-xs text-blue-400 hover:text-blue-300 font-['Inter']"
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
+            className="flex items-center gap-1 text-xs text-primary hover:underline active:scale-95 transition-transform"
             aria-label={showReplies ? "Hide replies" : "Show replies"}
           >
             {showReplies ? (
@@ -285,30 +232,22 @@ const CommentItem = ({
             {showReplies
               ? `Hide ${comment.replies.length} Replies`
               : `Show ${comment.replies.length} Replies`}
-          </motion.button>
-          <AnimatePresence>
-            {showReplies && (
-              <motion.div
-                variants={collapseVariants}
-                initial="closed"
-                animate="open"
-                exit="closed"
-                className="mt-2 space-y-2"
-              >
-                {comment.replies.map((reply: commentType) => (
-                  <CommentItem
-                    key={reply.id}
-                    comment={reply}
-                    postId={postId}
-                    level={level + 1}
-                  />
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+          </button>
+          {showReplies && (
+            <div className="mt-2 space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+              {comment.replies.map((reply: commentType) => (
+                <CommentItem
+                  key={reply.id}
+                  comment={reply}
+                  postId={postId}
+                  level={level + 1}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
-    </motion.div>
+    </div>
   );
 };
 

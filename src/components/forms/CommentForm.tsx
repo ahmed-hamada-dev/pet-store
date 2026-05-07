@@ -18,7 +18,6 @@ import { createComment } from "@/actions/comment.action";
 import toast from "react-hot-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { motion } from "framer-motion";
 
 
 const CommentForm = ({
@@ -114,11 +113,7 @@ const CommentForm = ({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
+    <div className="animate-in fade-in slide-in-from-top-2 duration-300">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -143,27 +138,25 @@ const CommentForm = ({
               </FormItem>
             )}
           />
-          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-            <Button
-              type="submit"
-              disabled={form.formState.isSubmitting || mutation.isPending}
-              className="
-                  bg-blue-400 text-white
-                   rounded-md
-                "
-            >
-              {mutation.isPending || form.formState.isSubmitting
-                ? "Posting..."
-                : customOnSubmit
-                ? "Update"
-                : parentId
-                ? "Reply"
-                : "Comment"}
-            </Button>
-          </motion.div>
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting || mutation.isPending}
+            className="
+                bg-blue-400 text-white
+                 rounded-md transition-all active:scale-95 hover:scale-105
+              "
+          >
+            {mutation.isPending || form.formState.isSubmitting
+              ? "Posting..."
+              : customOnSubmit
+              ? "Update"
+              : parentId
+              ? "Reply"
+              : "Comment"}
+          </Button>
         </form>
       </Form>
-    </motion.div>
+    </div>
   );
 };
 export default CommentForm;

@@ -6,8 +6,7 @@ import { config } from "./lib/envConfig";
 import { UserRole } from "@prisma/client";
 import type { Adapter } from "next-auth/adapters";
 
-console.log(config.google.clientId);
-console.log(config.google.clientSecret);
+
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma) as Adapter, // Explicitly cast to Adapter
   session: { strategy: "jwt" },

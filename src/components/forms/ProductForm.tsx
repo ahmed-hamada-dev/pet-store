@@ -23,11 +23,10 @@ import { createProduct, updateProduct } from "@/actions/product.action";
 import { useGetAllCategories } from "@/hooks/useGetCategories";
 import Loader from "../shared/Loader";
 import ImageUpload from "../shared/ImageUpload";
-import { motion } from "framer-motion";
 
 interface IProps {
   product?: ProductWithCategoriesTable;
-  isInDialog?: boolean; // Added prop
+  isInDialog?: boolean;
 }
 
 type Status = { value: string; name: string };
@@ -36,37 +35,6 @@ const status: Status[] = [
   { value: "INACTIVE", name: "Inactive" },
   { value: "OUT_OF_STOCK", name: "Out of Stock" },
 ];
-
-// Animation variants (unchanged)
-const containerVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      staggerChildren: 0.1,
-    },
-  },
-} as const;
-
-const fieldVariants = {
-  hidden: { opacity: 0, x: -20 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.4, ease: "easeOut" },
-  },
-} as const;
-
-const buttonVariants = {
-  rest: { scale: 1 },
-  hover: {
-    scale: 1.05,
-    boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)",
-    transition: { type: "spring", stiffness: 300, damping: 20 },
-  },
-} as const;
 
 function ProductForm({ product, isInDialog = false }: IProps) {
   const form = useForm({
@@ -130,13 +98,10 @@ function ProductForm({ product, isInDialog = false }: IProps) {
   };
 
   return (
-    <motion.div
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <div
       className={`
         ${isInDialog ? "py-2" : "min-h-screen py-16"}
-        bg-background
+        bg-background animate-in fade-in duration-500
       `}
     >
       <div
@@ -144,20 +109,12 @@ function ProductForm({ product, isInDialog = false }: IProps) {
           ${isInDialog ? "px-0" : "container mx-auto px-4 sm:px-6 lg:px-8"}
         `}
       >
-        {/* Header (only shown outside dialog) */}
         {!isInDialog && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1 className="text-4xl font-extrabold text-foreground mb-10 text-center tracking-tight">
-              {product ? "Edit Product" : "Create New Product"}
-            </h1>
-          </motion.div>
+          <h1 className="text-4xl font-extrabold text-foreground mb-10 text-center tracking-tight animate-in slide-in-from-top-4 duration-500">
+            {product ? "Edit Product" : "Create New Product"}
+          </h1>
         )}
 
-        {/* Form Container */}
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
@@ -167,9 +124,9 @@ function ProductForm({ product, isInDialog = false }: IProps) {
               rounded-2xl
               shadow-[0_4px_12px_rgba(0,0,0,0.1)]
               ${isInDialog ? "p-4 space-y-4" : "p-8 space-y-8"}
+              animate-in slide-in-from-bottom-4 duration-500
             `}
           >
-            {/* Section: Basic Information */}
             <section>
               <h2
                 className={`font-semibold text-foreground ${
@@ -183,56 +140,51 @@ function ProductForm({ product, isInDialog = false }: IProps) {
                   isInDialog ? "gap-4" : "gap-6"
                 }`}
               >
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Product Name
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          placeholder="Enter product name"
-                          className="
-                            bg-background/80 border-primary/20
-                            focus:border-primary focus:ring-2 focus:ring-primary/20
-                            transition-all duration-300 rounded-lg
-                          "
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="slug"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Slug
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          placeholder="Enter slug (e.g., product-name)"
-                          className="
-                            bg-background/80 border-primary/20
-                            focus:border-primary focus:ring-2 focus:ring-primary/20
-                            transition-all duration-300 rounded-lg
-                          "
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Product Name
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        placeholder="Enter product name"
+                        className="
+                          bg-background/80 border-primary/20
+                          focus:border-primary focus:ring-2 focus:ring-primary/20
+                          transition-all duration-300 rounded-lg
+                        "
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="slug"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Slug
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        placeholder="Enter slug (e.g., product-name)"
+                        className="
+                          bg-background/80 border-primary/20
+                          focus:border-primary focus:ring-2 focus:ring-primary/20
+                          transition-all duration-300 rounded-lg
+                        "
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </section>
 
-            {/* Section: Pricing & Inventory */}
             <section>
               <h2
                 className={`font-semibold text-foreground ${
@@ -246,83 +198,76 @@ function ProductForm({ product, isInDialog = false }: IProps) {
                   isInDialog ? "gap-4" : "gap-6"
                 }`}
               >
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="price"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Price
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          type="number"
-                          placeholder="Enter price"
-                          className="
-                            bg-background/80 border-primary/20
-                            focus:border-primary focus:ring-2 focus:ring-primary/20
-                            transition-all duration-300 rounded-lg
-                          "
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="quantity"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Quantity
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          type="number"
-                          placeholder="Enter quantity"
-                          className="
-                            bg-background/80 border-primary/20
-                            focus:border-primary focus:ring-2 focus:ring-primary/20
-                            transition-all duration-300 rounded-lg
-                          "
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="discount"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Discount (%)
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          type="number"
-                          placeholder="Enter discount percentage"
-                          value={field.value ?? 0}
-                          className="
-                            bg-background/80 border-primary/20
-                            focus:border-primary focus:ring-2 focus:ring-primary/20
-                            transition-all duration-300 rounded-lg
-                          "
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
+                <FormField
+                  control={form.control}
+                  name="price"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Price
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder="Enter price"
+                        className="
+                          bg-background/80 border-primary/20
+                          focus:border-primary focus:ring-2 focus:ring-primary/20
+                          transition-all duration-300 rounded-lg
+                        "
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="quantity"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Quantity
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder="Enter quantity"
+                        className="
+                          bg-background/80 border-primary/20
+                          focus:border-primary focus:ring-2 focus:ring-primary/20
+                          transition-all duration-300 rounded-lg
+                        "
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="discount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Discount (%)
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        type="number"
+                        placeholder="Enter discount percentage"
+                        value={field.value ?? 0}
+                        className="
+                          bg-background/80 border-primary/20
+                          focus:border-primary focus:ring-2 focus:ring-primary/20
+                          transition-all duration-300 rounded-lg
+                        "
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </section>
 
-            {/* Section: Category & Status */}
             <section>
               <h2
                 className={`font-semibold text-foreground ${
@@ -336,83 +281,75 @@ function ProductForm({ product, isInDialog = false }: IProps) {
                   isInDialog ? "gap-4" : "gap-6"
                 }`}
               >
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="categoryId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Category
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={field.value}
+                <FormField
+                  control={form.control}
+                  name="categoryId"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Category
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <SelectTrigger
+                          className="
+                            bg-background/80 border-primary/20
+                            focus:border-primary focus:ring-2 focus:ring-primary/20
+                            transition-all duration-300 rounded-lg
+                          "
                         >
-                          <SelectTrigger
-                            className="
-                              bg-background/80 border-primary/20
-                              focus:border-primary focus:ring-2 focus:ring-primary/20
-                              transition-all duration-300 rounded-lg
-                            "
-                          >
-                            <SelectValue placeholder="Select a category" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {categories.map((category) => (
-                              <SelectItem key={category.id} value={category.id}>
-                                {category.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    name="status"
-                    control={form.control}
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Status
-                        </FormLabel>
-                        <Select
-                          onValueChange={field.onChange}
-                          defaultValue={product ? product.status : field.value}
+                          <SelectValue placeholder="Select a category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {categories.map((category) => (
+                            <SelectItem key={category.id} value={category.id}>
+                              {category.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="status"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Status
+                      </FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={product ? product.status : field.value}
+                      >
+                        <SelectTrigger
+                          className="
+                            bg-background/80 border-primary/20
+                            focus:border-primary focus:ring-2 focus:ring-primary/20
+                            transition-all duration-300 rounded-lg
+                          "
                         >
-                          <SelectTrigger
-                            className="
-                              bg-background/80 border-primary/20
-                              focus:border-primary focus:ring-2 focus:ring-primary/20
-                              transition-all duration-300 rounded-lg
-                            "
-                          >
-                            <SelectValue placeholder="Select status" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {status.map((status) => (
-                              <SelectItem
-                                key={status.value}
-                                value={status.value}
-                              >
-                                {status.name}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
+                          <SelectValue placeholder="Select status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {status.map((status) => (
+                            <SelectItem key={status.value} value={status.value}>
+                              {status.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </section>
 
-            {/* Section: Images */}
             <section>
               <h2
                 className={`font-semibold text-foreground ${
@@ -421,35 +358,32 @@ function ProductForm({ product, isInDialog = false }: IProps) {
               >
                 Product Images
               </h2>
-              <motion.div variants={fieldVariants}>
-                <FormField
-                  control={form.control}
-                  name="images"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-sm font-medium text-foreground">
-                        Images
-                      </FormLabel>
-                      <div
-                        className={`
-                          bg-background/80 border border-primary/20
-                          rounded-lg ${isInDialog ? "p-3" : "p-4"}
-                        `}
-                      >
-                        <ImageUpload
-                          value={field.value}
-                          onChange={field.onChange}
-                          endpoint="multiImageUploader"
-                        />
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </motion.div>
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-sm font-medium text-foreground">
+                      Images
+                    </FormLabel>
+                    <div
+                      className={`
+                        bg-background/80 border border-primary/20
+                        rounded-lg ${isInDialog ? "p-3" : "p-4"}
+                      `}
+                    >
+                      <ImageUpload
+                        value={field.value}
+                        onChange={field.onChange}
+                        endpoint="multiImageUploader"
+                      />
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </section>
 
-            {/* Section: Additional Details */}
             <section>
               <h2
                 className={`font-semibold text-foreground ${
@@ -461,83 +395,75 @@ function ProductForm({ product, isInDialog = false }: IProps) {
               <div
                 className={`grid grid-cols-1 ${isInDialog ? "gap-4" : "gap-6"}`}
               >
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="description"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Description
-                        </FormLabel>
-                        <Textarea
-                          {...field}
-                          placeholder="Enter product description"
-                          value={field.value ?? ""}
-                          className={`
-                            bg-background/80 border-primary/20
-                            focus:border-primary focus:ring-2 focus:ring-primary/20
-                            transition-all duration-300 rounded-lg
-                            ${isInDialog ? "min-h-[100px]" : "min-h-[120px]"}
-                          `}
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="brand"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Brand
-                        </FormLabel>
-                        <Input
-                          {...field}
-                          placeholder="Enter brand name"
-                          className="
-                            bg-background/80 border-primary/20
-                            focus:border-primary focus:ring-2 focus:ring-primary/20
-                            transition-all duration-300 rounded-lg
-                          "
-                        />
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
-                <motion.div variants={fieldVariants}>
-                  <FormField
-                    control={form.control}
-                    name="isFeatured"
-                    render={({ field }) => (
-                      <FormItem className="flex items-center space-x-2">
-                        <Checkbox
-                          onCheckedChange={field.onChange}
-                          checked={field.value}
-                          className="
-                            border-primary/20
-                            data-[state=checked]:bg-primary
-                            data-[state=checked]:border-primary
-                          "
-                        />
-                        <FormLabel className="text-sm font-medium text-foreground">
-                          Featured Product
-                        </FormLabel>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </motion.div>
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Description
+                      </FormLabel>
+                      <Textarea
+                        {...field}
+                        placeholder="Enter product description"
+                        value={field.value ?? ""}
+                        className={`
+                          bg-background/80 border-primary/20
+                          focus:border-primary focus:ring-2 focus:ring-primary/20
+                          transition-all duration-300 rounded-lg
+                          ${isInDialog ? "min-h-[100px]" : "min-h-[120px]"}
+                        `}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="brand"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Brand
+                      </FormLabel>
+                      <Input
+                        {...field}
+                        placeholder="Enter brand name"
+                        className="
+                          bg-background/80 border-primary/20
+                          focus:border-primary focus:ring-2 focus:ring-primary/20
+                          transition-all duration-300 rounded-lg
+                        "
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="isFeatured"
+                  render={({ field }) => (
+                    <FormItem className="flex items-center space-x-2">
+                      <Checkbox
+                        onCheckedChange={field.onChange}
+                        checked={field.value}
+                        className="
+                          border-primary/20
+                          data-[state=checked]:bg-primary
+                          data-[state=checked]:border-primary
+                        "
+                      />
+                      <FormLabel className="text-sm font-medium text-foreground">
+                        Featured Product
+                      </FormLabel>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
             </section>
 
-            {/* Submit Button */}
-            <motion.div
-              variants={fieldVariants}
+            <div
               className={`
                 sticky bottom-0
                 bg-background/60 backdrop-blur-xl
@@ -546,51 +472,49 @@ function ProductForm({ product, isInDialog = false }: IProps) {
                 ${isInDialog ? "py-3 -mx-4 px-4" : "py-4 -mx-8 px-8"}
               `}
             >
-              <motion.div variants={buttonVariants} whileHover="hover">
-                <Button
-                  disabled={form.formState.isSubmitting}
-                  className="
-                    w-full bg-primary hover:bg-primary/90
-                    text-primary-foreground font-semibold
-                    rounded-lg
-                    shadow-md hover:shadow-lg
-                    transition-all duration-300
-                  "
-                >
-                  {form.formState.isSubmitting ? (
-                    <span className="flex items-center">
-                      <svg
-                        className="animate-spin h-5 w-5 mr-2"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      Processing...
-                    </span>
-                  ) : product ? (
-                    "Update Product"
-                  ) : (
-                    "Create Product"
-                  )}
-                </Button>
-              </motion.div>
-            </motion.div>
+              <Button
+                disabled={form.formState.isSubmitting}
+                className="
+                  w-full bg-primary hover:bg-primary/90
+                  text-primary-foreground font-semibold
+                  rounded-lg
+                  shadow-md hover:shadow-lg active:scale-[0.98]
+                  transition-all duration-300
+                "
+              >
+                {form.formState.isSubmitting ? (
+                  <span className="flex items-center">
+                    <svg
+                      className="animate-spin h-5 w-5 mr-2"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    Processing...
+                  </span>
+                ) : product ? (
+                  "Update Product"
+                ) : (
+                  "Create Product"
+                )}
+              </Button>
+            </div>
           </form>
         </Form>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

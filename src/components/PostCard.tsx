@@ -14,28 +14,8 @@ import { createUpvote } from "@/actions/upvote.action";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import toast from "react-hot-toast";
 import CommentList from "./CommentList";
-import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
-const buttonVariants = {
-  hover: { scale: 1.1 },
-  tap: { scale: 0.9 },
-};
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0 },
-};
-
-const collapseVariants = {
-  open: {
-    height: "auto",
-    opacity: 1,
-  },
-  closed: {
-    height: 0,
-    opacity: 0,
-  },
-};
 const PostCard = ({ post }: { post: PostType }) => {
   const { data: user } = useCurrentUser();
   const queryClient = useQueryClient();
@@ -88,13 +68,8 @@ const PostCard = ({ post }: { post: PostType }) => {
   const dateToShow = post.updatedAt ?? post.createdAt;
 
   return (
-    <motion.div
-      className="bg-card rounded-xl border shadow-sm p-6 space-y-4 hover:shadow-md transition-shadow"
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      whileHover={{ scale: 1.01 }}
-      transition={{ type: "spring", stiffness: 300 }}
+    <div
+      className="bg-card rounded-xl border shadow-sm p-6 space-y-4 hover:shadow-md transition-all duration-300 hover:scale-[1.01]"
     >
       <div className="flex justify-between items-start">
         <Link
@@ -155,51 +130,37 @@ const PostCard = ({ post }: { post: PostType }) => {
       </div>
 
       <div className="flex items-center gap-6 pt-2 border-t border-border">
-        <motion.button
+        <button
           onClick={() => upvote()}
-          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all duration-200 active:scale-95 hover:scale-110 ${
             isUpvoted
               ? "bg-primary text-primary-foreground"
               : "hover:bg-muted text-muted-foreground hover:text-foreground"
           }`}
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
           disabled={!user}
         >
           <Heart className={`h-4 w-4 ${isUpvoted ? "fill-current" : ""}`} />
           <span className="text-sm font-medium">{post._count.upvotes}</span>
-        </motion.button>
+        </button>
 
-        <motion.button
+        <button
           onClick={() => setShowComments(!showComments)}
-          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
-          variants={buttonVariants}
-          whileHover="hover"
-          whileTap="tap"
+          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-200 active:scale-95 hover:scale-110"
         >
           <MessageCircle className="h-4 w-4" />
           <span className="text-sm font-medium">{post.comments?.length || 0}</span>
-        </motion.button>
+        </button>
       </div>
 
-      <AnimatePresence>
-        {showComments && (
-          <motion.div
-            variants={collapseVariants}
-            initial="closed"
-            animate="open"
-            exit="closed"
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="space-y-4 pt-4 border-t border-border"
-          >
-            <CommentForm postId={post.id} />
-            <CommentList postId={post.id} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+      {showComments && (
+        <div className="space-y-4 pt-4 border-t border-border animate-in fade-in slide-in-from-top-2 duration-300">
+          <CommentForm postId={post.id} />
+          <CommentList postId={post.id} />
+        </div>
+      )}
+    </div>
   );
 };
 
 export default PostCard;
+

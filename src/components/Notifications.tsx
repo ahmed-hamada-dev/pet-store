@@ -16,106 +16,25 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Badge } from "@/components/ui/badge";
-import { motion } from "framer-motion";
-
-// Animation variants
-const bellVariants = {
-  animate: (unreadCount: number) => ({
-    rotate: unreadCount > 0 ? [0, 12, -12, 0] : 0,
-    scale: unreadCount > 0 ? [1, 1.08, 1] : 1,
-    transition: {
-      duration: 0.7,
-      repeat: unreadCount > 0 ? Infinity : 0,
-      ease: "easeInOut",
-    },
-  }),
-};
-
-const notificationVariants = {
-  hidden: { opacity: 0, y: 15, scale: 0.95 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      delay: i * 0.15,
-      type: "spring",
-      stiffness: 120,
-      damping: 15,
-    },
-  }),
-};
-
-const sheetVariants = {
-  hidden: { x: "100%", opacity: 0 },
-  visible: {
-    x: 0,
-    opacity: 1,
-    transition: { duration: 0.5, ease: [0.4, 0, 0.2, 1] },
-  },
-};
-
-const buttonVariants = {
-  hover: { scale: 1.05, transition: { type: "spring", stiffness: 300 } },
-  tap: { scale: 0.95 },
-};
-
-const badgeVariants = {
-  animate: {
-    scale: [1, 1.08, 1],
-    transition: { duration: 1.8, repeat: Infinity, ease: "easeInOut" },
-  },
-};
-
-const skeletonVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: 0.3, ease: "easeIn" },
-  },
-};
 
 // Skeleton Component
 const NotificationSkeleton = () => (
-  <motion.div
-    variants={skeletonVariants}
-    initial="hidden"
-    animate="visible"
-    className="space-y-2"
+  <div
+    className="space-y-2 animate-in fade-in duration-300"
     role="status"
     aria-label="Loading notifications"
   >
     {[...Array(3)].map((_, index) => (
       <div
         key={index}
-        className="p-3 rounded-md border border-blue-300/50 bg-gray-700/20"
+        className="p-3 rounded-md border border-border bg-muted/20"
       >
-        <style jsx>{`
-          .skeleton-pulse {
-            background: linear-gradient(
-              90deg,
-              rgba(107, 114, 128, 0.2) 25%,
-              rgba(107, 114, 128, 0.3) 50%,
-              rgba(107, 114, 128, 0.2) 75%
-            );
-            background-size: 200% 100%;
-            animation: pulse 1.5s ease-in-out infinite;
-          }
-          @keyframes pulse {
-            0% {
-              background-position: 200% 0;
-            }
-            100% {
-              background-position: -200% 0;
-            }
-          }
-        `}</style>
-        <div className="h-4 w-3/4 rounded skeleton-pulse mb-2" />
-        <div className="h-3 w-1/2 rounded skeleton-pulse mb-1" />
-        <div className="h-3 w-1/4 rounded skeleton-pulse" />
+        <div className="h-4 w-3/4 rounded bg-muted animate-pulse mb-2" />
+        <div className="h-3 w-1/2 rounded bg-muted animate-pulse mb-1" />
+        <div className="h-3 w-1/4 rounded bg-muted animate-pulse" />
       </div>
     ))}
-  </motion.div>
+  </div>
 );
 
 // Notifications Component
@@ -147,38 +66,33 @@ const Notifications = () => {
         <Button
           variant="ghost"
           size="icon"
-          className="relative hover:bg-gray-600/50"
+          className="relative hover:bg-muted/50"
           aria-label={`Notifications${
             unreadCount > 0 ? `, ${unreadCount} unread` : ""
           }`}
         >
-          <motion.div
-            variants={bellVariants}
-            animate="animate"
-            custom={unreadCount}
-          >
-            <Bell className="w-5 h-5 text-gray-100" />
-          </motion.div>
+          <div className={unreadCount > 0 ? "animate-bounce" : ""}>
+            <Bell className="w-5 h-5 text-foreground" />
+          </div>
           {unreadCount > 0 && (
-            <motion.div variants={badgeVariants} animate="animate">
-              <Badge
-                variant="destructive"
-                className="
-                  absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center
-                  rounded-full text-xs bg-rose-400/90 text-white font-['Inter']
-                "
-              >
-                {unreadCount}
-              </Badge>
-            </motion.div>
+            <Badge
+              variant="destructive"
+              className="
+                absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center
+                rounded-full text-xs bg-destructive text-destructive-foreground
+                animate-in zoom-in duration-300
+              "
+            >
+              {unreadCount}
+            </Badge>
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-md bg-gray-600/30 backdrop-blur-md border-blue-400/20">
-        <motion.div variants={sheetVariants} initial="hidden" animate="visible">
+      <SheetContent className="w-full sm:max-w-md bg-background/95 backdrop-blur-md border-border">
+        <div className="animate-in slide-in-from-right-4 duration-500">
           <SheetHeader>
-            <SheetTitle className="flex items-center gap-2 text-gray-100 font-['Inter'] text-lg">
-              <Bell className="w-5 h-5 text-blue-400" />
+            <SheetTitle className="flex items-center gap-2 text-foreground text-lg">
+              <Bell className="w-5 h-5 text-primary" />
               Notifications
             </SheetTitle>
           </SheetHeader>
@@ -186,66 +100,58 @@ const Notifications = () => {
             {isLoading ? (
               <NotificationSkeleton />
             ) : isError ? (
-              <p className="text-sm text-rose-400 text-center font-['Inter']">
+              <p className="text-sm text-destructive text-center">
                 Failed to load notifications:{" "}
                 {error?.message || "Unknown error"}
               </p>
             ) : notifications && notifications.length > 0 ? (
-              notifications.map((notification, index) => (
-                <motion.div
+              notifications.map((notification) => (
+                <div
                   key={notification.id}
-                  variants={notificationVariants}
-                  custom={index}
-                  initial="hidden"
-                  animate="visible"
                   className={`
-                    p-3 rounded-md border bg-gray-700/20 shadow-sm
+                    p-3 rounded-md border bg-muted/10 shadow-sm
                     ${
                       notification.isRead
-                        ? "border-blue-300/50"
-                        : "border-blue-400"
+                        ? "border-border"
+                        : "border-primary/50"
                     }
-                    hover:bg-gray-700/30 transition-colors
+                    hover:bg-muted/20 transition-colors animate-in fade-in slide-in-from-top-1 duration-300
                   `}
                 >
-                  <p className="text-sm text-gray-100 font-['Inter']">
+                  <p className="text-sm text-foreground">
                     {notification.message}
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     {formatDistanceToNow(new Date(notification.createdAt), {
                       addSuffix: true,
                     })}
                   </p>
                   {!notification.isRead && (
-                    <motion.div
-                      variants={buttonVariants}
-                      whileHover="hover"
-                      whileTap="tap"
-                      className="mt-1"
-                    >
+                    <div className="mt-1">
                       <Button
                         variant="link"
                         size="sm"
                         onClick={() => markAsRead(notification.id)}
-                        className="p-0 h-auto text-blue-400 hover:text-blue-300 font-['Inter']"
+                        className="p-0 h-auto text-primary hover:text-primary/80 transition-transform active:scale-95"
                         aria-label={`Mark notification ${notification.id} as read`}
                       >
                         Mark as read
                       </Button>
-                    </motion.div>
+                    </div>
                   )}
-                </motion.div>
+                </div>
               ))
             ) : (
-              <p className="text-sm text-gray-400 text-center font-['Inter']">
+              <p className="text-sm text-muted-foreground text-center">
                 No notifications
               </p>
             )}
           </div>
-        </motion.div>
+        </div>
       </SheetContent>
     </Sheet>
   );
 };
 
 export default Notifications;
+

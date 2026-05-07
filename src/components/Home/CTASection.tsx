@@ -2,41 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-import { Users, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function CTASection() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, duration: 0.6 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
-
-  const buttonVariants = {
-    hover: { scale: 1.1, boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)" },
-    tap: { scale: 0.95 },
-    focus: { outline: "2px solid #ffffff", outlineOffset: "4px" },
-  };
-
   return (
-    <motion.section
-      className="relative py-20 bg-primary text-primary-foreground overflow-hidden"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-    >
+    <section className="relative py-20 bg-primary text-primary-foreground overflow-hidden">
       {/* Subtle Background Image Overlay */}
       <div
         className="absolute inset-0 opacity-10 "
@@ -48,43 +18,27 @@ export default function CTASection() {
         }}
       />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-        <motion.h3
-          className="text-4xl sm:text-5xl font-extrabold mb-6 tracking-tight"
-          variants={itemVariants}
-        >
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out fill-mode-both">
+        <h3 className="text-4xl sm:text-5xl font-extrabold mb-6 tracking-tight">
           Join Our <span className="text-stone-700">Pet-Loving</span> Community
-        </motion.h3>
-        <motion.p
-          className="text-lg sm:text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto"
-          variants={itemVariants}
-        >
+        </h3>
+        <p className="text-lg sm:text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
           Connect with thousands of pet owners, share tips, and unlock exclusive
           offers tailored for you and your furry friends.
-        </motion.p>
-        <motion.div
-          className="flex justify-center mb-10"
-          variants={itemVariants}
-        >
-          <motion.div
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            whileFocus="focus"
+        </p>
+        <div className="flex justify-center mb-10">
+          <Button
+            asChild
+            size="lg"
+            className="transition-all duration-300 flex items-center gap-2 px-10 py-5 rounded-full font-bold hover:scale-105 active:scale-95 shadow-xl hover:shadow-2xl bg-white text-primary hover:bg-stone-50"
+            aria-label="Join the pet community"
           >
-            <Button
-              asChild
-              size="lg"
-              className=" transition-all duration-300 flex items-center gap-2 px-8 py-4 rounded-full font-semibold "
-              aria-label="Join the pet community"
-            >
-              <Link href="/community">
-                Get Started <ArrowRight className="w-5 h-5" />
-              </Link>
-            </Button>
-          </motion.div>
-        </motion.div>
+            <Link href="/community">
+              Get Started <ArrowRight className="w-5 h-5" />
+            </Link>
+          </Button>
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

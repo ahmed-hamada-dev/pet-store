@@ -23,14 +23,8 @@ import toast from "react-hot-toast";
 import { upsertPost } from "@/actions/post.action";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
-import { motion } from "framer-motion";
 
 type PostFormValues = z.infer<typeof postZod>;
-
-const formVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
-};
 
 export default function PostForm({ post }: { post?: Post }) {
   const queryClient = useQueryClient();
@@ -111,7 +105,7 @@ export default function PostForm({ post }: { post?: Post }) {
   const onSubmit = (data: PostFormValues) => mutation.mutate(data);
 
   return (
-    <motion.div variants={formVariants} initial="hidden" animate="visible">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -184,7 +178,7 @@ export default function PostForm({ post }: { post?: Post }) {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting || mutation.isPending}
-              className="px-6 bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
+              className="px-6 bg-primary text-primary-foreground hover:bg-primary/90 transition-all active:scale-95"
             >
               {post
                 ? mutation.isPending
@@ -197,6 +191,6 @@ export default function PostForm({ post }: { post?: Post }) {
           </div>
         </form>
       </Form>
-    </motion.div>
+    </div>
   );
 }

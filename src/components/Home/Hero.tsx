@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
 import { ChevronRight, Users } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
@@ -31,36 +30,8 @@ export default function HeroSection() {
     };
   }, [emblaApi]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.3, duration: 0.8 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
-    },
-  };
-
-  const buttonVariants = {
-    hover: { scale: 1.1, boxShadow: "0 4px 12px rgba(0, 0, 0, 0.2)" },
-    tap: { scale: 0.95 },
-    focus: { outline: "2px solid #ffffff", outlineOffset: "4px" },
-  };
-
   return (
-    <motion.section
-      className="relative min-h-[80vh] flex items-center justify-center py-24 text-foreground overflow-hidden"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <section className="relative min-h-[80vh] flex items-center justify-center py-24 text-foreground overflow-hidden">
       {/* Background Image Carousel */}
       <div className="absolute inset-0" ref={emblaRef}>
         <div className="flex h-full">
@@ -81,74 +52,40 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Fallback Message if Images Don't Load */}
-      {backgroundImages.length === 0 && (
-        <div className="absolute inset-0 flex items-center justify-center bg-gray-800 z-0">
-          <p className="text-white text-lg">No background images available</p>
-        </div>
-      )}
-
       {/* Content */}
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10">
-        <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight"
-          variants={itemVariants}
-        >
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center z-10 animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-white mb-6 tracking-tight">
           Everything Your Pet Needs,{" "}
-          <motion.span
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.5, duration: 0.5 }}
-          >
+          <span className="text-primary-foreground/90">
             Plus a Community That Cares!
-          </motion.span>
-        </motion.h1>
-        <motion.p
-          className="text-lg sm:text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto"
-          variants={itemVariants}
-        >
+          </span>
+        </h1>
+        <p className="text-lg sm:text-xl md:text-2xl text-white/90 mb-10 max-w-3xl mx-auto">
           Discover premium pet food, supplies, and a vibrant community of pet
           lovers ready to share tips and support.
-        </motion.p>
-        <motion.div
-          className="flex flex-col sm:flex-row justify-center gap-4"
-          variants={itemVariants}
-        >
-          <motion.div
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            whileFocus="focus"
+        </p>
+        <div className="flex flex-col sm:flex-row justify-center gap-4">
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 px-8 py-4 rounded-full hover:scale-105 shadow-lg active:scale-95"
+            aria-label="Shop now for pet products"
           >
-            <Button
-              asChild
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 px-6 py-3 rounded-full"
-              aria-label="Shop now for pet products"
-            >
-              <Link href="/products/1">
-                Shop Now <ChevronRight className="w-5 h-5" />
-              </Link>
-            </Button>
-          </motion.div>
-          <motion.div
-            variants={buttonVariants}
-            whileHover="hover"
-            whileTap="tap"
-            whileFocus="focus"
+            <Link href="/products/1">
+              Shop Now <ChevronRight className="w-5 h-5" />
+            </Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            className="bg-white/10 text-white backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all duration-300 flex items-center gap-2 px-8 py-4 rounded-full hover:scale-105 active:scale-95"
+            aria-label="Join the pet community"
           >
-            <Button
-              asChild
-              size="lg"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 px-6 py-3 rounded-full"
-              aria-label="Join the pet community"
-            >
-              <Link href="/community">
-                Join Community <Users className="w-5 h-5" />
-              </Link>
-            </Button>
-          </motion.div>
-        </motion.div>
+            <Link href="/community">
+              Join Community <Users className="w-5 h-5" />
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Carousel Dots */}
@@ -164,6 +101,6 @@ export default function HeroSection() {
           />
         ))}
       </div>
-    </motion.section>
+    </section>
   );
 }

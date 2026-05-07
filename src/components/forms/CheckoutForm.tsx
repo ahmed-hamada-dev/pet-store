@@ -25,7 +25,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import { config } from "@/lib/envConfig";
 import { Card } from "../ui/card";
 import { Loader2 } from "lucide-react";
-import { motion } from "framer-motion";
 
 const stripePromise = loadStripe(config.stripe.public);
 
@@ -100,7 +99,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
   };
 
   return (
-    <Card className="p-6 border-none shadow-sm bg-background/95 backdrop-blur-sm">
+    <Card className="p-6 border-none shadow-sm bg-background/95 backdrop-blur-sm animate-in fade-in duration-500">
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
@@ -115,16 +114,11 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   Name
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    {...field}
-                    placeholder="Full Name"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  {...field}
+                  placeholder="Full Name"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -139,17 +133,12 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   Email
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    type="email"
-                    {...field}
-                    placeholder="Email Address"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  type="email"
+                  {...field}
+                  placeholder="Email Address"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -164,17 +153,12 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   Phone
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    type="tel"
-                    {...field}
-                    placeholder="Phone Number"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  type="tel"
+                  {...field}
+                  placeholder="Phone Number"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -189,25 +173,20 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   Payment Method
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
                 >
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <SelectTrigger className="border-muted/50 focus:ring-2 focus:ring-primary/50">
-                      <SelectValue placeholder="Select payment method" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="CASH_ON_DELIVERY">
-                        Cash on Delivery
-                      </SelectItem>
-                      <SelectItem value="VISA">Visa</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </motion.div>
+                  <SelectTrigger className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]">
+                    <SelectValue placeholder="Select payment method" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="CASH_ON_DELIVERY">
+                      Cash on Delivery
+                    </SelectItem>
+                    <SelectItem value="VISA">Visa</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -222,16 +201,11 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   Address
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    {...field}
-                    placeholder="Street Address"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  {...field}
+                  placeholder="Street Address"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -246,16 +220,11 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   City
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    {...field}
-                    placeholder="City"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  {...field}
+                  placeholder="City"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -270,16 +239,11 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   Postal Code
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    {...field}
-                    placeholder="Postal Code"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  {...field}
+                  placeholder="Postal Code"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -294,16 +258,11 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   State
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    {...field}
-                    placeholder="State"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  {...field}
+                  placeholder="State"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
@@ -318,31 +277,22 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 <FormLabel className="text-sm font-semibold text-foreground">
                   Country
                 </FormLabel>
-                <motion.div
-                  whileFocus={{ scale: 1.02 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Input
-                    {...field}
-                    placeholder="Country"
-                    className="border-muted/50 focus:ring-2 focus:ring-primary/50"
-                  />
-                </motion.div>
+                <Input
+                  {...field}
+                  placeholder="Country"
+                  className="border-muted/50 focus:ring-2 focus:ring-primary/50 transition-all hover:scale-[1.01]"
+                />
                 <FormMessage className="text-destructive" />
               </FormItem>
             )}
           />
 
           {/* Submit Button */}
-          <motion.div
-            className="sm:col-span-2 mt-4"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.2 }}
-          >
+          <div className="sm:col-span-2 mt-4">
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="w-full bg-green-500  text-white transition-all duration-300 animate-pulse-subtle"
+              className="w-full bg-green-500 text-white transition-all duration-300 hover:scale-[1.02] active:scale-95"
             >
               {form.formState.isSubmitting ? (
                 <>
@@ -357,7 +307,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
                 "Proceed to Visa Payment"
               )}
             </Button>
-          </motion.div>
+          </div>
         </form>
       </Form>
     </Card>

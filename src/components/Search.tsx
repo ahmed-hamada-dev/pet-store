@@ -10,49 +10,6 @@ import { Product } from "@prisma/client";
 import { useState } from "react";
 import { Input } from "./ui/input";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
-import { motion, Variants } from "framer-motion";
-
-const inputVariants: Variants = {
-  initial: { scale: 1, boxShadow: "0 0 0 rgba(59, 130, 246, 0)" },
-  focus: {
-    scale: 1.05,
-    boxShadow: "0 0 12px rgba(59, 130, 246, 0.5)",
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-  hover: {
-    scale: 1.03,
-    transition: { duration: 0.25, ease: "easeOut" },
-  },
-};
-
-const dropdownVariants: Variants = {
-  hidden: { opacity: 0, y: -10, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.3,
-      ease: [0.6, -0.05, 0.01, 0.99],
-      staggerChildren: 0.05,
-    },
-  },
-};
-
-const suggestionVariants: Variants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: {
-      duration: 0.4,
-      ease: "easeOut",
-      type: "spring",
-      stiffness: 120,
-      damping: 12,
-    },
-  },
-};
 
 export default function Search() {
   const router = useRouter();
@@ -87,13 +44,7 @@ export default function Search() {
 
   return (
     <div className="relative w-full max-w-xs">
-      <motion.div
-        variants={inputVariants}
-        initial="initial"
-        whileHover="hover"
-        whileFocus="focus"
-        className="relative group"
-      >
+      <div className="relative group transition-transform duration-300 hover:scale-[1.02]">
         <Input
           type="text"
           value={inputValue}
@@ -101,57 +52,46 @@ export default function Search() {
           placeholder="Search products..."
           className="
             bg-background/95 backdrop-blur-md
-            border border-primary/20
+            border border-border
             rounded-lg
             px-4 py-2
             text-foreground
             placeholder:text-muted-foreground/70
             focus:ring-2 focus:ring-primary/50
-            focus:border-primary/50
             transition-all duration-300
             shadow-sm
           "
-          // disabled={isPending || isDebouncing}
         />
-        <motion.div
+        <div
           className="
             absolute inset-0 -z-10
             rounded-lg
-            bg-primary/20
+            bg-primary/10
             opacity-0 group-hover:opacity-100
-            blur-md
+            blur-lg
             transition-opacity duration-300
           "
-          variants={{
-            initial: { opacity: 0 },
-            hover: { opacity: 1 },
-            focus: { opacity: 1 },
-          }}
-          initial="initial"
-          animate={inputValue ? "focus" : "initial"}
         />
-      </motion.div>
+      </div>
 
       {suggestions.length > 0 && (
-        <motion.ul
-          variants={dropdownVariants}
-          initial="hidden"
-          animate="visible"
+        <ul
           className="
             absolute w-full mt-2
             bg-background/95 backdrop-blur-lg
-            border border-primary/20
+            border border-border
             rounded-lg
-            shadow-[0_4px_12px_rgba(0,0,0,0.15)]
+            shadow-xl
             z-20
             max-h-60 overflow-y-auto
+            animate-in fade-in zoom-in-95 duration-200
           "
         >
-          {suggestions.map((product) => (
-            <motion.li
+          {suggestions.map((product, index) => (
+            <li
               key={product.id}
-              variants={suggestionVariants}
-              className="group"
+              className="group animate-in fade-in slide-in-from-left-2 duration-300"
+              style={{ animationDelay: `${index * 50}ms` }}
             >
               <Link
                 href={`/products/product/${product.slug}`}
@@ -160,21 +100,17 @@ export default function Search() {
                   p-3
                   hover:bg-primary/10
                   transition-all duration-300
-                  border-b border-primary/10 last:border-b-0
+                  border-b border-border/50 last:border-b-0
                 "
               >
-                <Image
-                  src={product.images[0] || "/placeholder-image.jpg"}
-                  alt={product.name}
-                  width={48}
-                  height={48}
-                  className="
-                    rounded-md object-cover
-                    ring-1 ring-primary/20
-                    group-hover:ring-primary/50
-                    transition-all duration-300
-                  "
-                />
+                <div className="relative w-12 h-12 rounded-md overflow-hidden border">
+                  <Image
+                    src={product.images[0] || "/placeholder-image.jpg"}
+                    alt={product.name}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
                 <p
                   className="
                     ml-3 text-sm font-medium
@@ -186,9 +122,9 @@ export default function Search() {
                   {product.name}
                 </p>
               </Link>
-            </motion.li>
+            </li>
           ))}
-        </motion.ul>
+        </ul>
       )}
     </div>
   );

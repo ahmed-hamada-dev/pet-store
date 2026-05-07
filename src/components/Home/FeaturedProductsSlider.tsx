@@ -7,7 +7,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
-import { motion } from "framer-motion";
 import { ProductWithCategories } from "@/lib/types/product.types";
 
 type FeaturedProductsSliderProps = {
@@ -43,58 +42,31 @@ export default function FeaturedProductsSlider({
   const scrollPrev = () => emblaApi?.scrollPrev();
   const scrollNext = () => emblaApi?.scrollNext();
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.2, duration: 0.5 },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-  };
-
   return (
-    <motion.section
-      className="py-16 bg-muted/10"
-      variants={containerVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-    >
+    <section className="py-16 bg-muted/10 animate-in fade-in duration-700">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.h3
-          className="text-3xl font-bold text-foreground mb-8 text-center"
-          variants={itemVariants}
-        >
+        <h3 className="text-3xl font-bold text-foreground mb-8 text-center animate-in slide-in-from-bottom-4 duration-500">
           Featured Products
-        </motion.h3>
+        </h3>
         {products.length > 0 ? (
           <div className="relative">
             <div className="overflow-hidden" ref={emblaRef}>
               <div className="flex">
                 {products.map((product) => (
-                  <motion.div
+                  <div
                     key={product.id}
-                    className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] px-2"
-                    whileHover={{
-                      scale: 1.03,
-                      transition: { duration: 0.3 },
-                    }}
+                    className="flex-[0_0_100%] sm:flex-[0_0_50%] lg:flex-[0_0_33.33%] px-2 transition-transform duration-300 hover:scale-[1.02]"
                   >
                     <Link
                       href={`/products/product/${product.slug}`}
-                      className="bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow"
+                      className="block bg-card rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow h-full"
                     >
-                      <div className="relative">
+                      <div className="relative aspect-video">
                         <Image
                           src={product.images[0] || "/default-product.png"}
                           alt={product.name}
-                          width={300}
-                          height={200}
-                          className="w-full h-48 object-cover"
+                          fill
+                          className="object-cover"
                           priority={products.indexOf(product) < 3}
                         />
                         {product.discount && (
@@ -104,27 +76,27 @@ export default function FeaturedProductsSlider({
                         )}
                       </div>
                       <div className="p-4">
-                        <h4 className="text-lg font-semibold text-foreground">
+                        <h4 className="text-lg font-semibold text-foreground truncate">
                           {product.name}
                         </h4>
-                        <p className="text-muted-foreground">
+                        <p className="text-muted-foreground font-bold">
                           ${product.price.toFixed(2)}
                         </p>
                         {product.category && (
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-sm text-muted-foreground mt-1">
                             {product.category.name}
                           </p>
                         )}
                       </div>
                     </Link>
-                  </motion.div>
+                  </div>
                 ))}
               </div>
             </div>
             <button
               onClick={scrollPrev}
               disabled={!canPrev}
-              className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-background/80 text-foreground rounded-full p-2 disabled:opacity-50"
+              className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 bg-background border shadow-lg text-foreground rounded-full p-3 disabled:opacity-0 transition-all hover:scale-110 active:scale-95 z-10"
               aria-label="Previous product"
             >
               <ChevronLeft className="h-6 w-6" />
@@ -132,19 +104,19 @@ export default function FeaturedProductsSlider({
             <button
               onClick={scrollNext}
               disabled={!canNext}
-              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-background/80 text-foreground rounded-full p-2 disabled:opacity-50"
+              className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 bg-background border shadow-lg text-foreground rounded-full p-3 disabled:opacity-0 transition-all hover:scale-110 active:scale-95 z-10"
               aria-label="Next product"
             >
               <ChevronRight className="h-6 w-6" />
             </button>
-            <div className="flex justify-center mt-4 space-x-2">
+            <div className="flex justify-center mt-6 space-x-2">
               {products.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => emblaApi?.scrollTo(index)}
-                  className={`h-2 w-2 rounded-full ${
+                  className={`h-2 w-2 rounded-full transition-all duration-300 ${
                     emblaApi?.selectedScrollSnap() === index
-                      ? "bg-primary"
+                      ? "bg-primary w-4"
                       : "bg-muted"
                   }`}
                   aria-label={`Go to product ${index + 1}`}
@@ -153,25 +125,22 @@ export default function FeaturedProductsSlider({
             </div>
           </div>
         ) : (
-          <motion.p
-            className="text-muted-foreground text-center"
-            variants={itemVariants}
-          >
+          <p className="text-muted-foreground text-center py-12">
             No products available.
-          </motion.p>
+          </p>
         )}
-        <motion.div className="text-center mt-8" variants={itemVariants}>
+        <div className="text-center mt-12 animate-in fade-in duration-1000">
           <Button
             asChild
-            variant="link"
-            className="text-primary hover:text-primary/80"
+            variant="outline"
+            className="rounded-full px-8 hover:bg-primary hover:text-primary-foreground transition-all"
           >
             <Link href="/products/1">
-              View All Products <ChevronRight className="ml-1 h-4 w-4" />
+              View All Products <ChevronRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
-        </motion.div>
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }

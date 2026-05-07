@@ -2,28 +2,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { motion, Variants } from "framer-motion";
-// import { LucideIcon } from "lucide-react";
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.5,
-      ease: [0.6, -0.05, 0.01, 0.99],
-      type: "spring",
-      stiffness: 120,
-      damping: 12,
-    },
-  },
-  hover: {
-    scale: 1.03,
-    boxShadow: "0 8px 24px rgba(59, 130, 246, 0.3)",
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-};
 
 interface OverviewCardProps {
   title: string;
@@ -38,12 +16,7 @@ export default function OverviewCard({
   isLoading,
 }: OverviewCardProps) {
   return (
-    <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      animate="visible"
-      whileHover="hover"
-    >
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
       <Card
         className="
           bg-background/95 backdrop-blur-md
@@ -51,6 +24,8 @@ export default function OverviewCard({
           shadow-sm
           transition-all duration-300
           hover:border-primary/50
+          hover:scale-[1.02]
+          hover:shadow-lg
         "
       >
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -65,6 +40,6 @@ export default function OverviewCard({
           )}
         </CardContent>
       </Card>
-    </motion.div>
+    </div>
   );
 }
