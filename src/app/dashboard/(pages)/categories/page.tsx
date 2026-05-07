@@ -54,7 +54,7 @@ const cardLinks: CardLink[] = [
 ];
 function CategoryPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-primary/5 py-16">
+    <div className="min-h-screen bg-background py-16">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}

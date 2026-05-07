@@ -26,7 +26,7 @@ const containerVariants = {
       staggerChildren: 0.1,
     },
   },
-};
+} as const;
 
 const fieldVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -35,7 +35,7 @@ const fieldVariants = {
     x: 0,
     transition: { duration: 0.4, ease: "easeOut" },
   },
-};
+} as const;
 
 const buttonVariants = {
   rest: { scale: 1 },
@@ -44,7 +44,7 @@ const buttonVariants = {
     boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)",
     transition: { type: "spring", stiffness: 300, damping: 20 },
   },
-};
+} as const;
 
 function CategoryForm({ category }: IProps) {
   const form = useForm<categoryZod>({
@@ -89,7 +89,7 @@ function CategoryForm({ category }: IProps) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="min-h-screen bg-gradient-to-b from-background to-primary/5 py-16"
+      className="min-h-screen bg-background py-16"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}

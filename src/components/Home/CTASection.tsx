@@ -31,7 +31,7 @@ export default function CTASection() {
 
   return (
     <motion.section
-      className="relative py-20 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground overflow-hidden"
+      className="relative py-20 bg-primary text-primary-foreground overflow-hidden"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -84,13 +84,6 @@ export default function CTASection() {
             </Button>
           </motion.div>
         </motion.div>
-        <motion.p
-          className="text-base sm:text-lg text-primary-foreground/80 flex items-center justify-center gap-2"
-          variants={itemVariants}
-        >
-          <Users className="w-5 h-5" aria-hidden="true" />
-          Join 10,000+ pet lovers already connected!
-        </motion.p>
       </div>
     </motion.section>
   );

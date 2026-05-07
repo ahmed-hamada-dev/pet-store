@@ -9,7 +9,7 @@ async function DashboardLayout({ children }: { children: ReactNode }) {
   const user = await getUser();
   if (!user || user?.role === "USER") return redirect("/");
   return (
-    <div className=" mt-10">
+    <div className="mt-10 min-h-screen bg-background">
       <AdminNavbar />
       {children}
     </div>

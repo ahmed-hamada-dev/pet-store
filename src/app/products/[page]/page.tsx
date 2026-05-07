@@ -13,7 +13,7 @@ async function ProductPage({ params }: { params: Promise<{ page: string }> }) {
   const data = await getCachedProducts(page, limit);
   if (!data || !data.products || data.products.length === 0) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <div className="min-h-screen bg-background">
         <div className="py-16">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold">
@@ -30,12 +30,12 @@ async function ProductPage({ params }: { params: Promise<{ page: string }> }) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-background">
       <section className="py-16">
         <div className="container mx-auto px-4">
           {/* Hero Section */}
           <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary transition-all duration-300">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-primary transition-all duration-300">
               Explore Our Products
             </h1>
             <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto transition-opacity duration-300">

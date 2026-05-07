@@ -49,9 +49,9 @@ function CheckoutDialog({ children }: CheckoutDialogProps) {
         >
           <DialogContent className="sm:max-w-lg bg-background/95 backdrop-blur-sm border-none shadow-xl  mx-auto min-h-[90vh] overflow-y-auto rounded-lg">
             {/* Gradient Border Accent */}
-            <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg pointer-events-none" />
+            <div className="absolute inset-0 border-2 border-transparent bg-primary/20 rounded-lg pointer-events-none" />
             <DialogHeader className="px-6 pt-6">
-              <DialogTitle className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              <DialogTitle className="text-2xl font-bold tracking-tight text-primary">
                 Checkout
               </DialogTitle>
               <p className="text-muted-foreground text-sm">

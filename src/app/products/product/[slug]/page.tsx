@@ -59,7 +59,7 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+      <div className="min-h-screen bg-background">
         <div className="container mx-auto px-4 py-12">
           <h1 className="text-3xl font-bold text-center text-red-600">
             Product Not Found
@@ -73,7 +73,7 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   }
 
   return (
-    <div className="min-h-screen min-w-full bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen min-w-full bg-background">
       <div className="container mx-auto px-4 py-12 space-y-12">
         {/* Product Details */}
         <section>
@@ -84,7 +84,7 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
         <section>
           <Card className="border-none shadow-lg bg-background/95 backdrop-blur-sm">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              <CardTitle className="text-2xl font-bold tracking-tight text-primary">
                 Related Products
               </CardTitle>
               <p className="text-muted-foreground">
@@ -151,7 +151,7 @@ async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
           </Suspense>
         </section>
 
-        <Separator className="my-8 bg-gradient-to-r from-muted/30 to-muted/50" />
+        <Separator className="my-8 bg-muted/30" />
       </div>
     </div>
   );

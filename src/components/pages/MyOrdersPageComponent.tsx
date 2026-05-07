@@ -70,9 +70,9 @@ export default function MyOrdersPageComponent({
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <Card className="border-none shadow-2xl bg-background/95 backdrop-blur-md rounded-xl relative overflow-hidden">
-        <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-primary/30 to-secondary/30 rounded-xl pointer-events-none" />
+        <div className="absolute inset-0 border-2 border-transparent bg-primary/30 rounded-xl pointer-events-none" />
         <CardHeader className="pb-4">
-          <CardTitle className="text-3xl sm:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          <CardTitle className="text-3xl sm:text-4xl font-bold tracking-tight text-primary">
             My Orders
           </CardTitle>
           <p className="text-muted-foreground text-sm sm:text-base">
@@ -97,7 +97,7 @@ export default function MyOrdersPageComponent({
                   className="group"
                 >
                   <Card className="relative border-none shadow-lg bg-background/80 backdrop-blur-md p-6 rounded-lg transition-all duration-300 group-hover:shadow-xl group-hover:-translate-y-1">
-                    <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-muted/30 to-muted/10 rounded-lg pointer-events-none group-hover:from-primary/40 group-hover:to-secondary/40 transition-all duration-500" />
+                    <div className="absolute inset-0 border-2 border-transparent bg-muted/30 rounded-lg pointer-events-none  transition-all duration-500" />
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
                       <motion.div
                         initial={{ scale: 0.9 }}
@@ -175,7 +175,7 @@ export default function MyOrdersPageComponent({
                             <div className="absolute inset-0 rounded-lg group-hover/image:shadow-[0_8px_16px_rgba(0,0,0,0.15)] transition-shadow duration-300" />
                           </div>
                           <div className="flex-1">
-                            <p className="font-semibold text-foreground text-base group-hover/item:bg-clip-text group-hover/item:text-transparent group-hover/item:bg-gradient-to-r group-hover/item:from-primary group-hover/item:to-secondary transition-all duration-300">
+                            <p className="font-semibold text-foreground text-base group-hover/item:bg-clip-text group-hover/item:text-transparent  transition-all duration-300">
                               {item.product.name}
                             </p>
                             <p className="text-sm text-muted-foreground">
@@ -192,7 +192,7 @@ export default function MyOrdersPageComponent({
                     {/* Total Price */}
                     <motion.p
                       variants={totalVariants}
-                      className="mt-6 text-lg sm:text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
+                      className="mt-6 text-lg sm:text-xl font-bold text-primary"
                     >
                       Total: ${totalPrice.toFixed(2)}
                     </motion.p>

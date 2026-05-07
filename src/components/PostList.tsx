@@ -1,6 +1,3 @@
-
-
-
 "use client";
 
 import { PostsType } from "@/lib/types/post.types";
@@ -12,22 +9,16 @@ import { useInView } from "react-intersection-observer";
 import { motion } from "framer-motion";
 import { Loader2 } from "lucide-react";
 
-function PostList({
-  initialPosts,
-  search = "",
-}: {
-  initialPosts: PostsType;
-  search?: string;
-}) {
+function PostList({ initialPosts }: { initialPosts: PostsType }) {
   const { ref, inView } = useInView();
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["posts", search],
+      queryKey: ["posts"],
       queryFn: async ({ pageParam }) => {
         return await getPaginatedPosts({
           limit: 5,
-          search,
+          search: "",
           cursor: pageParam ?? undefined,
         });
       },
@@ -62,7 +53,7 @@ function PostList({
         staggerChildren: 0.2,
       },
     },
-  };
+  } as const;
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -75,7 +66,7 @@ function PostList({
         damping: 15,
       },
     },
-  };
+  } as const;
 
   return (
     <motion.div

@@ -1,5 +1,3 @@
-
-
 "use client";
 
 import React from "react";
@@ -50,7 +48,7 @@ const containerVariants = {
       staggerChildren: 0.1,
     },
   },
-};
+} as const;
 
 const fieldVariants = {
   hidden: { opacity: 0, x: -20 },
@@ -59,7 +57,7 @@ const fieldVariants = {
     x: 0,
     transition: { duration: 0.4, ease: "easeOut" },
   },
-};
+} as const;
 
 const buttonVariants = {
   rest: { scale: 1 },
@@ -68,7 +66,7 @@ const buttonVariants = {
     boxShadow: "0 4px 12px rgba(59, 130, 246, 0.3)",
     transition: { type: "spring", stiffness: 300, damping: 20 },
   },
-};
+} as const;
 
 function ProductForm({ product, isInDialog = false }: IProps) {
   const form = useForm({
@@ -138,7 +136,7 @@ function ProductForm({ product, isInDialog = false }: IProps) {
       animate="visible"
       className={`
         ${isInDialog ? "py-2" : "min-h-screen py-16"}
-        bg-gradient-to-b from-background to-primary/5
+        bg-background
       `}
     >
       <div

@@ -38,24 +38,31 @@ export const updateUser = async (data: userZod) => {
   try {
     const user = await cachedUser();
     if (!user) {
-      throw new Error("unAuthenticated");
+      throw new Error("Unauthorized");
     }
+
+    const parsed = userZod.safeParse(data);
+    if (!parsed.success) {
+      throw new Error("Invalid user data: " + parsed.error.message);
+    }
+
     const userId = user.id;
     return await prisma.user.update({
       where: { id: userId },
       data: {
-        name: data.name || user.name,
-        image: data.image || user.image,
-        phone: data.phone || user.phone,
-        address: data.address || user.address,
-        city: data.city || user.city,
-        state: data.state || user.state,
-        postalCode: data.postalCode || user.postalCode,
-        country: data.country || user.country,
+        name: parsed.data.name ?? user.name,
+        image: parsed.data.image ?? user.image,
+        phone: parsed.data.phone ?? user.phone,
+        address: parsed.data.address ?? user.address,
+        city: parsed.data.city ?? user.city,
+        state: parsed.data.state ?? user.state,
+        postalCode: parsed.data.postalCode ?? user.postalCode,
+        country: parsed.data.country ?? user.country,
       },
     });
   } catch (error: any) {
-    console.log(error.message);
+    console.error("Error updating user:", error.message);
+    throw new Error(error.message || "Failed to update profile.");
   }
 };
 

@@ -5,8 +5,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import QueryProvider from "@/providers/QueryProvider";
 import Navbar from "@/components/Navbar";
-import Alert from "@/components/Alert";
-// import { Suspense } from "react";
+import ProgressBar from "@/components/ProgressBar";
+import { Suspense } from "react";
 import { SessionProvider } from "next-auth/react";
 
 const inter = Inter({
@@ -61,7 +61,9 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={`${inter.variable} antialiased bg-gray-700`}>
+      <body
+        className={`${inter.variable} antialiased bg-background text-foreground`}
+      >
         <SessionProvider>
           <QueryProvider>
             <ThemeProvider
@@ -70,12 +72,13 @@ export default async function RootLayout({
               enableSystem
               disableTransitionOnChange
             >
+              <Suspense fallback={null}>
+                <ProgressBar />
+              </Suspense>
               {/* <Suspense
                 fallback={<div className="h-16 bg-background/90 animate-pulse" />}
               > */}
               <Navbar />
-              {/* </Suspense> */}
-              <Alert />
               <main className="min-h-screen">{children}</main>
               <Toaster
                 toastOptions={{

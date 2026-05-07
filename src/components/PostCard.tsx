@@ -5,7 +5,7 @@
 import { PostType } from "@/lib/types/post.types";
 import Image from "next/image";
 import { format } from "date-fns";
-import { ChevronDown, ChevronUp, Heart, MessageCircle } from "lucide-react";
+import { Heart, MessageCircle } from "lucide-react";
 import PostDropdownMenu from "./PostDropdownMenu";
 import CommentForm from "./forms/CommentForm";
 import { useState } from "react";
@@ -18,24 +18,22 @@ import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
 const buttonVariants = {
-  hover: { scale: 1.1, transition: { type: "spring", stiffness: 300 } },
+  hover: { scale: 1.1 },
   tap: { scale: 0.9 },
 };
 const cardVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } },
+  visible: { opacity: 1, y: 0 },
 };
 
 const collapseVariants = {
   open: {
     height: "auto",
     opacity: 1,
-    transition: { duration: 0.3, ease: "easeOut" },
   },
   closed: {
     height: 0,
     opacity: 0,
-    transition: { duration: 0.3, ease: "easeIn" },
   },
 };
 const PostCard = ({ post }: { post: PostType }) => {
@@ -68,7 +66,7 @@ const PostCard = ({ post }: { post: PostType }) => {
                         : p._count.upvotes + 1,
                     },
                   }
-                : p
+                : p,
             ),
           })),
         };
@@ -88,39 +86,35 @@ const PostCard = ({ post }: { post: PostType }) => {
   if (!post) return null;
 
   const dateToShow = post.updatedAt ?? post.createdAt;
-  const UpdatedAtOrCreatedAt = post.updatedAt ? "Updated At " : "Created At";
 
   return (
     <motion.div
-      className="
-        rounded-xl border border-blue-400/20  backdrop-blur-md
-        shadow-lg p-6 space-y-4 hover:shadow-[0_10px_20px_rgba(0,0,0,0.15)]
-      "
+      className="bg-card rounded-xl border shadow-sm p-6 space-y-4 hover:shadow-md transition-shadow"
       variants={cardVariants}
       initial="hidden"
       animate="visible"
       whileHover={{ scale: 1.01 }}
       transition={{ type: "spring", stiffness: 300 }}
     >
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-start">
         <Link
           href={`/profile/${post.User.id}`}
-          className="flex items-center gap-3"
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity"
         >
           <Image
             src={post.User.image || "/default-avatar.png"}
             alt={post.User?.name || "User"}
-            width={40}
-            height={40}
-            className="rounded-full object-cover border border-blue-400/30"
+            width={48}
+            height={48}
+            className="rounded-full object-cover border-2 border-border"
           />
           <div>
-            <p className="text-sm font-medium  font-['Inter']">
+            <p className="font-semibold text-foreground hover:text-primary transition-colors">
               {post.User?.name}
             </p>
-            <p className="text-xs">
-              {UpdatedAtOrCreatedAt}:{" "}
-              {format(new Date(dateToShow), "MMM d, yyyy h:mm a")}
+            <p className="text-xs text-muted-foreground">
+              {format(new Date(dateToShow), "MMM d, yyyy 'at' h:mm a")}
+              {post.updatedAt && " (edited)"}
             </p>
           </div>
         </Link>
@@ -130,63 +124,64 @@ const PostCard = ({ post }: { post: PostType }) => {
       </div>
 
       <div className="space-y-3">
-        <h2 className="text-lg font-semibold  font-['Inter']">{post.title}</h2>
-        {post.description && <p className="text-sm ">{post.description}</p>}
+        <h2 className="text-xl font-semibold text-foreground leading-tight">
+          {post.title}
+        </h2>
+        {post.description && (
+          <p className="text-muted-foreground leading-relaxed">
+            {post.description}
+          </p>
+        )}
         {post.image && (
-          <div className="overflow-hidden rounded-lg">
-            <Image
-              src={post.image}
-              alt={post.title}
-              width={800}
-              height={400}
-              className="w-full max-h-[400px] object-cover rounded-md transition-transform duration-300 hover:scale-105"
-            />
+          <div className="overflow-hidden rounded-lg border">
+            {post.image.endsWith(".svg") ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={post.image}
+                alt={post.title}
+                className="w-full max-h-[400px] object-cover transition-transform duration-300 hover:scale-105"
+              />
+            ) : (
+              <Image
+                src={post.image}
+                alt={post.title}
+                width={800}
+                height={400}
+                className="w-full max-h-[400px] object-cover transition-transform duration-300 hover:scale-105"
+              />
+            )}
           </div>
         )}
       </div>
 
-      <div className="flex gap-4 text-sm">
+      <div className="flex items-center gap-6 pt-2 border-t border-border">
         <motion.button
           onClick={() => upvote()}
-          className="flex items-center gap-1 "
+          className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-all ${
+            isUpvoted
+              ? "bg-primary text-primary-foreground"
+              : "hover:bg-muted text-muted-foreground hover:text-foreground"
+          }`}
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"
-          aria-label={isUpvoted ? "Unlike post" : "Like post"}
+          disabled={!user}
         >
-          <Heart
-            className={`w-4 h-4 ${
-              isUpvoted ? "fill-rose-400 text-rose-400" : "text-gray-400"
-            }`}
-          />
-          {post._count.upvotes || 0}{" "}
-          {post._count.upvotes === 1 ? "Like" : "Likes"}
+          <Heart className={`h-4 w-4 ${isUpvoted ? "fill-current" : ""}`} />
+          <span className="text-sm font-medium">{post._count.upvotes}</span>
         </motion.button>
-        <motion.div
-          className="flex items-center gap-1 "
+
+        <motion.button
+          onClick={() => setShowComments(!showComments)}
+          className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted text-muted-foreground hover:text-foreground transition-all"
           variants={buttonVariants}
           whileHover="hover"
+          whileTap="tap"
         >
-          <MessageCircle className="w-4 h-4" />
-          {post.comments?.length || 0} Comments
-        </motion.div>
+          <MessageCircle className="h-4 w-4" />
+          <span className="text-sm font-medium">{post.comments?.length || 0}</span>
+        </motion.button>
       </div>
-
-      <motion.button
-        className="flex items-center gap-2 text-sm text-blue-400 hover:text-blue-300 font-['Inter']"
-        onClick={() => setShowComments(!showComments)}
-        variants={buttonVariants}
-        whileHover="hover"
-        whileTap="tap"
-        aria-label={showComments ? "Hide comments" : "Show comments"}
-      >
-        {showComments ? (
-          <ChevronUp className="w-4 h-4" />
-        ) : (
-          <ChevronDown className="w-4 h-4" />
-        )}
-        {showComments ? "Hide Comments" : "Show Comments"}
-      </motion.button>
 
       <AnimatePresence>
         {showComments && (
@@ -195,7 +190,8 @@ const PostCard = ({ post }: { post: PostType }) => {
             initial="closed"
             animate="open"
             exit="closed"
-            className="space-y-2"
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="space-y-4 pt-4 border-t border-border"
           >
             <CommentForm postId={post.id} />
             <CommentList postId={post.id} />

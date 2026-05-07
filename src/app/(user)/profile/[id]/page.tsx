@@ -86,7 +86,7 @@ async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
           width={80}
           height={80}
           className="
-            rounded-full border-2 border-gradient-to-r from-blue-400 to-purple-400
+            rounded-full border-2 
             object-cover shadow-sm hover:scale-105 transition-transform duration-300
           "
         />
@@ -115,8 +115,8 @@ async function ProfilePage({ params }: { params: Promise<{ id: string }> }) {
                 href="/profile/update"
                 className="
                   inline-block mt-2 px-4 py-2 rounded-md text-white
-                  bg-gradient-to-r from-blue-400 to-purple-400
-                  hover:from-blue-500 hover:to-purple-500 font-['Inter']
+                  bg-blue-400
+                   font-['Inter']
                   transition-all duration-300 hover:px-5
                 "
                 aria-label="Update your profile"

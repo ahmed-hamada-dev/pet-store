@@ -342,7 +342,7 @@ export default function CheckoutForm({ onSubmit }: CheckoutFormProps) {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="w-full bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white transition-all duration-300 animate-pulse-subtle"
+              className="w-full bg-green-500  text-white transition-all duration-300 animate-pulse-subtle"
             >
               {form.formState.isSubmitting ? (
                 <>

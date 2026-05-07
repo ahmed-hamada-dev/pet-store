@@ -97,7 +97,7 @@ function FilterByCategory() {
           className="
             absolute inset-0 -z-10
             rounded-lg
-            bg-gradient-to-r from-primary/20 to-secondary/20
+            bg-primary/20
             opacity-0 group-hover:opacity-100
             blur-md
             transition-opacity duration-300

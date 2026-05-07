@@ -12,19 +12,38 @@ export async function createProduct(data: productZod) {
     const isAdmin = user?.role === "ADMIN";
     if (!isAdmin) throw new Error("User unauthorized ");
 
+    const parsed = productZod.safeParse(data);
+    if (!parsed.success) {
+      throw new Error("Invalid product data: " + parsed.error.message);
+    }
+
+    const {
+      name,
+      price,
+      slug,
+      brand,
+      categoryId,
+      description,
+      discount,
+      images,
+      isFeatured,
+      quantity,
+      status,
+    } = parsed.data;
+
     const product = await prisma.product.create({
       data: {
-        name: data.name,
-        price: data.price,
-        slug: data.slug,
-        brand: data.brand,
-        categoryId: data.categoryId,
-        description: data.description,
-        discount: data.discount,
-        images: data.images,
-        isFeatured: data.isFeatured,
-        quantity: data.quantity,
-        status: data.status,
+        name,
+        price,
+        slug,
+        brand,
+        categoryId,
+        description,
+        discount,
+        images,
+        isFeatured,
+        quantity,
+        status,
       },
     });
 
@@ -47,20 +66,39 @@ export async function updateProduct({
     const user = await cachedUser();
     const isAdmin = user?.role === "ADMIN";
     if (!isAdmin) throw new Error("User unauthorized ");
+    const parsed = productZod.safeParse(data);
+    if (!parsed.success) {
+      throw new Error("Invalid product data: " + parsed.error.message);
+    }
+
+    const {
+      name,
+      price,
+      slug,
+      brand,
+      categoryId,
+      description,
+      discount,
+      images,
+      isFeatured,
+      quantity,
+      status,
+    } = parsed.data;
+
     const product = await prisma.product.update({
       where: { id },
       data: {
-        name: data.name,
-        price: data.price,
-        slug: data.slug,
-        brand: data.brand,
-        categoryId: data.categoryId,
-        description: data.description,
-        discount: data.discount,
-        images: data.images,
-        isFeatured: data.isFeatured,
-        quantity: data.quantity,
-        status: data.status,
+        name,
+        price,
+        slug,
+        brand,
+        categoryId,
+        description,
+        discount,
+        images,
+        isFeatured,
+        quantity,
+        status,
       },
     });
     revalidateTag("products");

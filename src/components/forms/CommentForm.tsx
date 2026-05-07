@@ -148,8 +148,8 @@ const CommentForm = ({
               type="submit"
               disabled={form.formState.isSubmitting || mutation.isPending}
               className="
-                  bg-gradient-to-r from-blue-400 to-purple-400 text-white
-                  hover:from-blue-500 hover:to-purple-500 rounded-md
+                  bg-blue-400 text-white
+                   rounded-md
                 "
             >
               {mutation.isPending || form.formState.isSubmitting

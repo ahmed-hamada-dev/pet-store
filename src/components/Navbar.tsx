@@ -101,7 +101,7 @@ export default function Navbar() {
         bg-background/90 backdrop-blur-lg
         shadow-[0_4px_12px_rgba(0,0,0,0.1)]
         border-b border-primary/20
-        bg-gradient-to-r from-primary/15 via-secondary/15 to-primary/15
+        
         flex flex-col gap-4
         md:grid md:grid-cols-2
         lg:flex lg:flex-row lg:items-center lg:justify-between
@@ -115,14 +115,10 @@ export default function Navbar() {
             href="/"
             className="
               text-3xl font-extrabold tracking-tighter
-              bg-clip-text text-transparent
-              bg-gradient-to-r from-primary via-secondary to-primary
-              hover:bg-gradient-to-l
               transition-all duration-700
-              drop-shadow-[0_2px_4px_rgba(59,130,246,0.3)]
             "
           >
-            MyStore
+            Pet Store
           </Link>
         </motion.div>
         <div className="flex items-center space-x-6">
@@ -141,7 +137,7 @@ export default function Navbar() {
                 <span
                   className="
                     absolute bottom-0 left-0 w-0 h-0.5
-                    bg-gradient-to-r from-primary to-secondary
+                    bg-primary
                     transition-all duration-400 group-hover:w-full
                     shadow-[0_0_8px_rgba(59,130,246,0.4)]
                   "
@@ -164,7 +160,7 @@ export default function Navbar() {
                 <span
                   className="
                     absolute bottom-0 left-0 w-0 h-0.5
-                    bg-gradient-to-r from-primary to-secondary
+                    bg-primary
                     transition-all duration-400 group-hover:w-full
                     shadow-[0_0_8px_rgba(59,130,246,0.4)]
                   "
@@ -198,7 +194,7 @@ export default function Navbar() {
             className="
                 absolute inset-0 -z-10
                 rounded-md
-                bg-gradient-to-r from-primary/20 to-secondary/20
+                bg-primary/20
                 opacity-70 group-hover:opacity-100
                 blur-md
               "
@@ -225,7 +221,7 @@ export default function Navbar() {
             className="
                 absolute inset-0 -z-10
                 rounded-md
-                bg-gradient-to-r from-primary/20 to-secondary/20
+                bg-primary/20
                 opacity-70 group-hover:opacity-100
                 blur-md
               "
@@ -249,7 +245,7 @@ export default function Navbar() {
             className="
               absolute inset-0 -z-10
               rounded-full
-              bg-gradient-to-r from-primary/30 to-secondary/30
+              bg-primary/30
               opacity-70 group-hover:opacity-100
               blur-sm
               shadow-[0_0_10px_rgba(59,130,246,0.5)]
@@ -276,7 +272,7 @@ export default function Navbar() {
             className="
               absolute inset-0 -z-10
               rounded-full
-              bg-gradient-to-r from-primary/30 to-secondary/30
+              bg-primary/30
               opacity-70 group-hover:opacity-100
               blur-sm
               shadow-[0_0_10px_rgba(59,130,246,0.5)]
@@ -298,7 +294,7 @@ export default function Navbar() {
             className="
               absolute inset-0 -z-10
               rounded-full
-              bg-gradient-to-r from-primary/30 to-secondary/30
+              bg-primary/30
               opacity-70 group-hover:opacity-100
               blur-sm
               shadow-[0_0_10px_rgba(59,130,246,0.5)]

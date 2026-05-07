@@ -41,52 +41,56 @@ export async function POST(request: Request) {
       JSON.parse(metadata.orderData);
 
     try {
-      const cart = await prisma.cart.findUnique({
-        where: { userId },
-        include: { items: { include: { product: true } } },
-      });
-
-      if (!cart || cart.items.length === 0) {
-        return NextResponse.json({ error: "Cart is empty" }, { status: 400 });
-      }
-
-      const totalPrice = cart.items.reduce(
-        (sum, item) => sum + item.product.price * item.quantity,
-        0
-      );
-
-      const order = await prisma.order.create({
-        data: {
-          userId,
-          totalPrice,
-          paymentMethod: "VISA",
-          status: "PENDING",
-          address,
-          phone,
-          name,
-          email,
-          city,
-          state,
-          country,
-          postalCode,
-          items: {
-            create: cart.items.map((item) => ({
-              productId: item.product.id,
-              quantity: item.quantity,
-              price: item.product.price,
-            })),
-          },
-        },
-      });
-
-      for (const item of cart.items) {
-        await prisma.product.update({
-          where: { id: item.product.id },
-          data: { quantity: { decrement: item.quantity } },
+      const orderId = await prisma.$transaction(async (tx) => {
+        const cart = await tx.cart.findUnique({
+          where: { userId },
+          include: { items: { include: { product: true } } },
         });
-      }
 
-      await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
+        if (!cart || cart.items.length === 0) {
+          throw new Error("Cart is empty");
+        }
+
+        const totalPrice = cart.items.reduce(
+          (sum, item) => sum + item.product.price * item.quantity,
+          0
+        );
+
+        const order = await tx.order.create({
+          data: {
+            userId,
+            totalPrice,
+            paymentMethod: "VISA",
+            status: "PENDING",
+            address,
+            phone,
+            name,
+            email,
+            city,
+            state,
+            country,
+            postalCode,
+            items: {
+              create: cart.items.map((item) => ({
+                productId: item.product.id,
+                quantity: item.quantity,
+                price: item.product.price,
+              })),
+            },
+          },
+        });
+
+        for (const item of cart.items) {
+          await tx.product.update({
+            where: { id: item.product.id },
+            data: { quantity: { decrement: item.quantity } },
+          });
+        }
+
+        await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
+
+        return order.id;
+      });
 
       revalidatePath("/cart");
       revalidatePath("/my-orders/1");
@@ -94,7 +98,7 @@ export async function POST(request: Request) {
       revalidateTag("products");
       revalidateTag("my-orders");
 
-      return NextResponse.json({ success: true, orderId: order.id });
+      return NextResponse.json({ success: true, orderId });
     } catch (error: any) {
       console.error("Error processing webhook:", error);
       return NextResponse.json(

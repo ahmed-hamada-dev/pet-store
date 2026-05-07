@@ -78,7 +78,7 @@ function UpdateUserForm({ user }: { user: User }) {
   return (
     <div className="min-h-screen bg-background flex items-start justify-center pt-8">
       <motion.div
-        className="w-full max-w-md p-6 bg-card rounded-xl shadow-md border border-border bg-gradient-to-b from-card to-muted/20"
+        className="w-full max-w-md p-6 bg-card rounded-xl shadow-md border border-border "
         variants={containerVariants}
         initial="hidden"
         animate="visible"

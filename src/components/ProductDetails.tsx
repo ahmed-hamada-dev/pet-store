@@ -31,7 +31,7 @@ function ProductDetails({ product }: { product: ProductWithCategoriesTable }) {
   };
 
   return (
-    <section className="py-16 bg-gradient-to-b from-background to-muted/10">
+    <section className="py-16 bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12 relative">
           {/* Image Section */}
@@ -41,12 +41,12 @@ function ProductDetails({ product }: { product: ProductWithCategoriesTable }) {
                 <ProductImageSelector images={product.images || []} />
               </div>
               {discountPercentage > 0 && (
-                <Badge className="absolute top-4 left-4 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold px-3 py-1 scale-100 transition-transform duration-300 group-hover:scale-105">
+                <Badge className="absolute top-4 left-4 bg-red-500 text-white text-sm font-semibold px-3 py-1 scale-100 transition-transform duration-300 group-hover:scale-105">
                   {Math.round(discountPercentage)}% OFF
                 </Badge>
               )}
               {product.isFeatured && (
-                <Badge className="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-amber-500 text-white text-sm font-semibold px-3 py-1">
+                <Badge className="absolute top-4 right-4 bg-yellow-400 text-white text-sm font-semibold px-3 py-1">
                   Featured
                 </Badge>
               )}
@@ -57,7 +57,7 @@ function ProductDetails({ product }: { product: ProductWithCategoriesTable }) {
           <Card className="border-none shadow-lg bg-background/95 backdrop-blur-sm">
             <CardHeader className="pb-4">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                <CardTitle className="text-3xl md:text-4xl font-bold tracking-tight bg-clip-text text-transparent text-primary">
                   {product.name}
                 </CardTitle>
                 {product.quantity > 0 && (

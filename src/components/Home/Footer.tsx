@@ -25,7 +25,7 @@ export default function Footer() {
 
   return (
     <motion.footer
-      className="bg-gradient-to-b from-muted to-muted/80 py-16 text-foreground"
+      className="  py-16 text-foreground"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
@@ -96,16 +96,16 @@ export default function Footer() {
                   aria-hidden="true"
                 />
                 <a
-                  href="mailto:ahmedha258258@gmail.com"
+                  href="mailto:contact@ahmed-hamada.dev"
                   className="text-muted-foreground hover:text-primary text-sm"
-                  aria-label="Email us at ahmedha258258@gmail.com"
+                  aria-label="Email us at contact@ahmed-hamada.dev"
                 >
-                  ahmedha258258@gmail.com
+                  contact@ahmed-hamada.dev
                 </a>
               </div>
               <div className="flex space-x-4">
                 <a
-                  href="https://www.linkedin.com/in/ahmed-hamada-a83309239"
+                  href="https://www.linkedin.com/in/ahmed-hamada-dev/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary"
@@ -114,7 +114,7 @@ export default function Footer() {
                   <Linkedin className="h-5 w-5" />
                 </a>
                 <a
-                  href="https://github.com/snow6692"
+                  href="https://github.com/ahmed-hamada-dev"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-muted-foreground hover:text-primary"

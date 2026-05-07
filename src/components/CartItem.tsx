@@ -119,7 +119,7 @@ function CartItem({ item }: IProps) {
               variant={"destructive"}
               onClick={() => updateQuantityMutation.mutate(item.quantity - 1)}
               disabled={updateQuantityMutation.isPending || item.quantity === 1}
-              className="h-8 w-8 bg-gradient-to-r  bg-red-500 text-foreground rounded-full transition-all duration-300 disabled:opacity-50"
+              className="h-8 w-8 bg-red-500 text-foreground rounded-full transition-all duration-300 disabled:opacity-50"
             >
               {updateQuantityMutation.isPending &&
               updateQuantityMutation.variables === item.quantity - 1 ? (
@@ -136,7 +136,7 @@ function CartItem({ item }: IProps) {
               disabled={
                 updateQuantityMutation.isPending || item.quantity >= maxQuantity
               }
-              className="h-8 w-8 bg-gradient-to-r  bg-green-500 hover:bg-green-600 text-foreground rounded-full transition-all duration-300 disabled:opacity-50"
+              className="h-8 w-8 bg-green-500 hover:bg-green-600 text-foreground rounded-full transition-all duration-300 disabled:opacity-50"
             >
               {updateQuantityMutation.isPending &&
               updateQuantityMutation.variables === item.quantity + 1 ? (

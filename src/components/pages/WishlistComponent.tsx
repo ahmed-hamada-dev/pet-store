@@ -62,7 +62,7 @@ function WishlistComponent() {
   return (
     <Card className="border-none shadow-lg bg-background/95 backdrop-blur-sm">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+        <CardTitle className="text-3xl font-bold tracking-tight text-primary">
           Your Wishlist
         </CardTitle>
         <ConfirmDeleteCartItem onDelete={() => mutation.mutate()}>

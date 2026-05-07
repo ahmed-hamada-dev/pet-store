@@ -293,7 +293,7 @@ function OrdersTable({ orders }: { orders: ordersType }) {
       animate="visible"
       className="
         h-screen
-        bg-gradient-to-b from-background via-background to-primary/10
+        
         flex flex-col
         py-8
       "
@@ -304,7 +304,7 @@ function OrdersTable({ orders }: { orders: ordersType }) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <h1 className="text-5xl font-extrabold text-foreground mb-8 text-center tracking-tight bg-clip-text bg-gradient-to-r from-primary to-purple-500">
+          <h1 className="text-5xl font-extrabold text-foreground mb-8 text-center tracking-tight text-primary">
             Orders Management
           </h1>
         </motion.div>
@@ -347,7 +347,7 @@ function OrdersTable({ orders }: { orders: ordersType }) {
                         text-foreground font-bold text-base py-5
                         relative
                         after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0
-                        after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-purple-500
+                        after:h-0.5 
                         after:scale-x-0 after:origin-left after:transition-transform after:duration-300
                         hover:after:scale-x-100
                       "
@@ -379,7 +379,7 @@ function OrdersTable({ orders }: { orders: ordersType }) {
                         transition-all duration-300
                         relative
                         after:content-[''] after:absolute after:bottom-0 after:left-0 after:right-0
-                        after:h-0.5 after:bg-gradient-to-r after:from-primary after:to-purple-500
+                        after:h-0.5 
                         after:scale-x-0 after:transition-transform after:duration-500
                         hover:after:scale-x-100
                       "

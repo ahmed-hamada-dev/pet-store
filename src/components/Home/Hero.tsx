@@ -12,7 +12,7 @@ export default function HeroSection() {
   const autoplay = useRef(Autoplay({ delay: 5000 }));
   const [emblaRef, emblaApi] = useEmblaCarousel(
     { loop: true, slidesToScroll: 1 },
-    [autoplay.current]
+    [autoplay.current],
   );
 
   const backgroundImages = ["/squirrel.jpeg", "/bird.jpeg", "/cat.jpeg"];
@@ -96,7 +96,6 @@ export default function HeroSection() {
         >
           Everything Your Pet Needs,{" "}
           <motion.span
-            className="text-primary"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.5, duration: 0.5 }}
@@ -141,8 +140,7 @@ export default function HeroSection() {
             <Button
               asChild
               size="lg"
-              variant="outline"
-              className="border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center gap-2 px-6 py-3 rounded-full"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300 flex items-center gap-2 px-6 py-3 rounded-full"
               aria-label="Join the pet community"
             >
               <Link href="/community">

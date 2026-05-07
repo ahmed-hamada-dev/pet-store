@@ -14,7 +14,7 @@ export default async function MyOrdersPage({
   const hasOrders = data && data.myOrders && data.myOrders.length > 0;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Suspense fallback={<MyOrdersSkeleton />}>
           {hasOrders ? (

@@ -45,13 +45,13 @@ export default function CartPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/20">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <Card className="relative border-none shadow-xl bg-background/95 backdrop-blur-sm max-w-5xl mx-auto overflow-hidden">
           {/* Gradient Border Accent */}
-          <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg pointer-events-none" />
+          <div className="absolute inset-0 border-2 border-transparent bg-primary/20 rounded-lg pointer-events-none" />
           <CardHeader>
-            <CardTitle className="text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            <CardTitle className="text-3xl font-bold tracking-tight text-primary">
               Your Cart
             </CardTitle>
             <p className="text-lg text-muted-foreground">
@@ -114,7 +114,7 @@ export default function CartPage() {
                   </AnimatePresence>
                 </Suspense>
 
-                <Separator className="bg-gradient-to-r from-muted/30 to-muted/50" />
+                <Separator className="bg-muted/30" />
 
                 <motion.div
                   key={totalPrice}
@@ -135,7 +135,7 @@ export default function CartPage() {
                   <CheckoutDialog>
                     <Button
                       asChild
-                      className="flex-1 bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white transition-all duration-300 animate-pulse-subtle text-lg font-semibold"
+                      className="flex-1 bg-green-500  text-white transition-all duration-300 animate-pulse-subtle text-lg font-semibold"
                     >
                       <div className=" w-[360px] ">Checkout</div>
                     </Button>

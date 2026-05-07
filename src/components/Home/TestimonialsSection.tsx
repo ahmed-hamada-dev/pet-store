@@ -69,7 +69,7 @@ export default function TestimonialsSection() {
   }
 
   return (
-    <section className="py-16 bg-gradient-to-b from-muted/20 to-muted/10">
+    <section className="py-16 ">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -77,7 +77,7 @@ export default function TestimonialsSection() {
           transition={{ duration: 0.8, ease: "easeOut" }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+          <h2 className="text-4xl font-bold tracking-tight bg-clip-text text-transparent ">
             Voices of Our Customers
           </h2>
           <p className="mt-3 text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -105,7 +105,7 @@ export default function TestimonialsSection() {
                   <Card className="h-full relative overflow-hidden border border-muted/30 shadow-lg hover:shadow-xl transition-shadow duration-300 bg-background/95 backdrop-blur-sm">
                     <CardContent className="p-6">
                       <motion.div
-                        className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-secondary"
+                        className="absolute top-0 left-0 w-full h-1 "
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ duration: 0.8, delay: index * 0.3 }}

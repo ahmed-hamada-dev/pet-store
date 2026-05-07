@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// components/forms/PostForm.tsx
 "use client";
 
 import {
@@ -79,7 +78,7 @@ export default function PostForm({ post }: { post?: Post }) {
             pages: old.pages.map((page: any) => ({
               ...page,
               posts: page.posts.map((p: any) =>
-                p.id === post.id ? { ...p, ...newPost } : p
+                p.id === post.id ? { ...p, ...newPost } : p,
               ),
             })),
           };
@@ -103,7 +102,7 @@ export default function PostForm({ post }: { post?: Post }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast.success(
-        post ? "Post updated successfully" : "Post created successfully"
+        post ? "Post updated successfully" : "Post created successfully",
       );
       if (!post) form.reset();
     },
@@ -116,11 +115,11 @@ export default function PostForm({ post }: { post?: Post }) {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full rounded-2xl p-6 space-y-6 bg-gray-600/20 backdrop-blur-md border border-blue-400/20"
+          className="w-full rounded-3xl p-6 space-y-6 bg-background/95 border border-border shadow-sm"
         >
           <div className="flex items-center gap-3">
-            <div className="bg-gray-500/50 p-2 rounded-full">
-              <UserIcon className="w-6 h-6 text-gray-100" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+              <UserIcon className="w-6 h-6" />
             </div>
             <FormField
               control={form.control}
@@ -130,7 +129,7 @@ export default function PostForm({ post }: { post?: Post }) {
                   <FormControl>
                     <Input
                       placeholder="What's on your mind?"
-                      className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-lg font-medium text-gray-100 placeholder-gray-400"
+                      className="border-none bg-background/90 focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-0 text-foreground placeholder:text-muted-foreground"
                       {...field}
                     />
                   </FormControl>
@@ -149,7 +148,7 @@ export default function PostForm({ post }: { post?: Post }) {
                   <Textarea
                     placeholder="Add more details..."
                     rows={3}
-                    className="resize-none bg-transparent border-blue-400/20 focus-visible:ring-0 focus-visible:ring-offset-0 text-gray-100 placeholder-gray-400"
+                    className="resize-none bg-background/90 border border-border focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-0 text-foreground placeholder:text-muted-foreground"
                     {...field}
                   />
                 </FormControl>
@@ -163,16 +162,18 @@ export default function PostForm({ post }: { post?: Post }) {
             name="image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex items-center gap-2 text-gray-100 text-sm font-['Inter']">
+                <FormLabel className="flex items-center gap-2 text-sm text-muted-foreground font-semibold">
                   <ImageIcon className="w-4 h-4" />
                   Add an image
                 </FormLabel>
                 <FormControl>
-                  <ImageUpload
-                    endpoint="singleImageUploader"
-                    value={field.value ? [field.value] : []}
-                    onChange={(urls) => field.onChange(urls[0] || "")}
-                  />
+                  <div className="rounded-2xl border border-border bg-background/90 p-4">
+                    <ImageUpload
+                      endpoint="singleImageUploader"
+                      value={field.value ? [field.value] : []}
+                      onChange={(urls) => field.onChange(urls[0] || "")}
+                    />
+                  </div>
                 </FormControl>
                 <FormMessage className="text-rose-400" />
               </FormItem>
@@ -183,15 +184,15 @@ export default function PostForm({ post }: { post?: Post }) {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting || mutation.isPending}
-              className="px-6 bg-gradient-to-r from-blue-400 to-purple-400 text-white hover:from-blue-500 hover:to-purple-500"
+              className="px-6 bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
             >
               {post
                 ? mutation.isPending
                   ? "Updating..."
                   : "Update"
                 : mutation.isPending
-                ? "Posting..."
-                : "Post"}
+                  ? "Posting..."
+                  : "Post"}
             </Button>
           </div>
         </form>

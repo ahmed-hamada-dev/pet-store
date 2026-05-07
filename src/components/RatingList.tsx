@@ -66,7 +66,7 @@ function RatingList({ productId }: { productId: string }) {
 
   if (!ratings || ratings.length === 0) {
     return (
-      <Card className="border-none shadow-lg bg-background/95 backdrop-blur-sm">
+      <Card className="border-none shadow-lg ">
         <CardContent className="text-center py-8">
           <p className="text-muted-foreground text-lg">
             No ratings yet. Be the first to share your feedback!
@@ -89,7 +89,7 @@ function RatingList({ productId }: { productId: string }) {
             style={{ animationDelay: `${index * 100}ms` }}
           >
             {/* Gradient Border Accent */}
-            <div className="absolute inset-0 border-2 border-transparent bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg pointer-events-none" />
+            <div className="absolute inset-0 border-2 border-transparent bg-primary/20 rounded-lg pointer-events-none" />
             <CardContent className="p-6 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -131,13 +131,13 @@ function RatingList({ productId }: { productId: string }) {
                       "h-5 w-5 transition-all duration-200 group-hover:scale-110",
                       index < rating.rating
                         ? "fill-yellow-400 text-yellow-400 drop-shadow-glow"
-                        : "text-muted-foreground/50"
+                        : "text-muted-foreground/50",
                     )}
                   />
                 ))}
               </div>
 
-              <Separator className="bg-gradient-to-r from-muted/30 to-muted/50" />
+              <Separator className="bg-muted/30" />
 
               <p className="text-base text-foreground leading-relaxed">
                 {rating.comment || "No comment provided."}

@@ -83,38 +83,44 @@ export async function placeOrder(formData: orderZod) {
     }
 
     // Cash on Delivery
-    const order = await prisma.order.create({
-      data: {
-        userId: user.id,
-        totalPrice,
-        paymentMethod: "CASH_ON_DELIVERY",
-        status: "PENDING",
-        address,
-        phone,
-        name,
-        email,
-        city,
-        state,
-        country,
-        postalCode,
-        items: {
-          create: cart.items.map((item) => ({
-            productId: item.product.id,
-            quantity: item.quantity,
-            price: item.product.price,
-          })),
+    const order = await prisma.$transaction(async (tx) => {
+      const newOrder = await tx.order.create({
+        data: {
+          userId: user.id,
+          totalPrice,
+          paymentMethod: "CASH_ON_DELIVERY",
+          status: "PENDING",
+          address,
+          phone,
+          name,
+          email,
+          city,
+          state,
+          country,
+          postalCode,
+          items: {
+            create: cart.items.map((item) => ({
+              productId: item.product.id,
+              quantity: item.quantity,
+              price: item.product.price,
+            })),
+          },
         },
-      },
-    });
-
-    for (const item of cart.items) {
-      await prisma.product.update({
-        where: { id: item.product.id },
-        data: { quantity: { decrement: item.quantity } },
       });
-    }
 
-    await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
+      // Update product quantities
+      for (const item of cart.items) {
+        await tx.product.update({
+          where: { id: item.product.id },
+          data: { quantity: { decrement: item.quantity } },
+        });
+      }
+
+      // Clear the cart
+      await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
+
+      return newOrder;
+    });
 
     revalidatePath("/cart");
     revalidatePath("/my-orders/1");

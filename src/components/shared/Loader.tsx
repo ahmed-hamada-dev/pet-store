@@ -51,7 +51,7 @@ const Loader = () => {
       animate="visible"
       className="
         fixed inset-0 flex items-center justify-center
-        bg-gradient-to-b from-gray-700 to-blue-400/10 backdrop-blur-xl
+        bg-gray-700 backdrop-blur-xl
       "
       role="status"
       aria-label="Chasing"
@@ -329,7 +329,7 @@ const Loader = () => {
           variants={pulseVariants}
           animate="animate"
           className="
-            absolute inset-0 bg-gradient-to-br from-blue-400/10 to-purple-400/10
+            absolute inset-0 bg-primary/10
             rounded-3xl
           "
         />
@@ -338,7 +338,7 @@ const Loader = () => {
         <motion.p
           className="
             text-sm font-semibold bg-clip-text text-transparent
-            bg-gradient-to-r from-blue-400 to-purple-400
+            bg-blue-400
           "
           animate={{ y: [0, -2, 0] }}
           transition={{ duration: 0.5, repeat: Infinity, ease: "easeInOut" }}
